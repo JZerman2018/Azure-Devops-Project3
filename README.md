@@ -31,23 +31,23 @@ Create a Service Principal for Terraform and replace the below values in the ter
     * client_secret
     * tenant_id
 
-Login to Azure:\
-`az login`
+Login to Azure:<br>
+**`az login`**
 
-Create the password based authentication service principal for your project:\
-    `az ad sp create-for-rbac --name SPProject3`\
+Create the password based authentication service principal for your project: <br>
+    **`az ad sp create-for-rbac --name SPProject3`**<br>
 Make note of the password because it can't be retrieved, only reset.
 
 #### Azure DevOps
 
-1. Import the `azure-pipelines.yaml` and `StarterAPIs.json` files into Azure DevOps.
-2. Create a new Azure Pipeline from the `azure-pipelines.yaml` file.
+1. Import the **`azure-pipelines.yaml`** and **`StarterAPIs.json`** files into Azure DevOps.
+2. Create a new Azure Pipeline from the **`azure-pipelines.yaml`** file.
 
 #### Selenium
 
 1. [Download the latest Chrome driver](https://sites.google.com/a/chromium.org/chromedriver/).
-        `pip install -U selenium`
-2. You can test Selenium by executing the `login.py` file in the Selenium folder to view a demo site.
+        **`pip install -U selenium`**
+2. You can test Selenium by executing the **`login.py`** file in the Selenium folder to view a demo site.
 
 #### JMeter
 
