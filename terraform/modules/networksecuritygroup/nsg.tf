@@ -1,10 +1,10 @@
 resource "azurerm_network_security_group" "nsg" {
-  name                = "${var.application_type}-${var.resource_type}"
-  location            = "${var.location}"
-  resource_group_name = "${var.resource_group}"
+  name                = var.application_type-var.resource_type
+  location            = var.location
+  resource_group_name = var.resource_group
 
   security_rule {
-    name                       = "${var.application_type}-${var.resource_type}-5000"
+    name                       = var.application_type-var.resource_type-5000
     priority                   = 100
     direction                  = "Inbound"
     access                     = "Allow"
@@ -27,6 +27,6 @@ resource "azurerm_network_security_group" "nsg" {
     }
 }
 resource "azurerm_subnet_network_security_group_association" "test" {
-    subnet_id                 = "${var.subnet_id}"
+    subnet_id                 = var.subnet_id
     network_security_group_id = azurerm_network_security_group.nsg.id
 }
