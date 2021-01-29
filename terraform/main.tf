@@ -10,7 +10,7 @@ terraform {
     storage_account_name = "tstate$RANDOM"
     container_name       = "tstate"
     key                  = "terraform.tfstate"
-    access_key           = var.access_key
+    access_key           = ""
   }
 }
 module "resource_group" {
