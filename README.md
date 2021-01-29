@@ -45,6 +45,10 @@ Login to the Service Principal using the following command with you credentials 
 
 1. Import the **`azure-pipelines.yaml`** and **`StarterAPIs.json`** files into Azure DevOps.
 2. Create a new Azure Pipeline from the **`azure-pipelines.yaml`** file.
+3. In Azure Devops go to Project Settings > Service Connections > New Service Connection > Azure Resource Manage > Next > Service Principal (Automatic) > Next > Subscription. After choosing your subscription provide a name for the service connection.
+4. If the pipeline runs now it will fail since no resources are provisioned yet in Azure.
+5. Create your Azure resources (Most can be provisioned via Terraform).
+6. Create an SSH key to log in to your VM.
 
 #### Selenium
 
