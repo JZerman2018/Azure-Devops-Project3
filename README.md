@@ -24,7 +24,7 @@ Configure the storage account and state backend. Replace the values below in ter
     * container_name
     * access_key
 
-Create a Service Principal for Terraform and replace the below values in the terraform/environments/test/terraform.tfvars files with the output from  the Azure CLI.
+Create a Service Principal for Terraform and replace the below values in the terraform/environments/test/terraform.tfvars files with the output from the Azure CLI.
 
     * subscription_id
     * client_id
@@ -34,9 +34,12 @@ Create a Service Principal for Terraform and replace the below values in the ter
 Login to Azure:<br>
 **`az login`**
 
-Create the password based authentication service principal for your project: <br>
-    **`az ad sp create-for-rbac --name SPProject3`**<br>
+Create the password based authentication service principal for your project and query it for your ID and SECRET data: <br>
+    **`az ad sp create-for-rbac --name SPProject3 --query "{client_id: appId, client_secret: password, tenant_id: tenant}"`**<br>
 Make note of the password because it can't be retrieved, only reset.
+
+Login to the Service Principal using the following command with you credentials from the previous step: <br>
+    **`az login --service-principal --username APP_ID --tenant TENANT_ID --password`**
 
 #### Azure DevOps
 
