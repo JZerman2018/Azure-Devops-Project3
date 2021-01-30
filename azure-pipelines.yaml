@@ -26,7 +26,7 @@ stages:
       artifact: drop-fakerestapi
 
 - stage: App Deploy
-  displayName: 'App Deploy'
+  displayName: App Deploy
   jobs:
   - deployment: FakeRestAPI
     pool:
