@@ -9,11 +9,12 @@ stages:
       name: Hosted Ubuntu 1804
     steps:
     # Needed for Terraform VM deployment
-    # - task: InstallSSHKey@0
-    #   inputs:
-    #     knownHostsEntry: 'KNOWN_HOSTS_STRING'
-    #     sshPublicKey: 'PUBLIC_KEY'
-    #     sshKeySecureFile: 'id_rsa'
+    - task: InstallSSHKey@0
+      displayName: 'Install SSH Key'
+      inputs:
+        knownHostsEntry: 'default'
+        sshPublicKey: '$(ssh_pub_key)'
+        sshKeySecureFile: 'id_rsa'
     - task: ArchiveFiles@2
       displayName: 'Archive FakeRestAPI'
       inputs:
@@ -24,7 +25,8 @@ stages:
     - publish: $(Build.ArtifactStagingDirectory)/$(Build.BuildId)-fakerestapi.zip
       displayName: 'Upload Package'
       artifact: drop-fakerestapi
-- stage:
+- stage: App Deploy
+  displayName: FakeRest App Deploy
   jobs:
   - deployment: FakeRestAPI
     pool:
@@ -41,27 +43,45 @@ stages:
               appName: ''
               appType: webApp
               package: $(Pipeline.Workspace)/drop-fakerestapi/$(Build.BuildId)-fakerestapi.zip
-  # - deployment: VMDeploy
-  #   displayName: NAME
-  #   environment:
-  #     name:  ENVIRONMENT NAME
-  #     resourceType: VirtualMachine
-  #     tags: TAG NAME
-  #   strategy:
-  #     runOnce:
-  #       deploy:
-  #         steps:
-  #         - task: Bash@3
-  #           inputs:
-  #             targetType: 'inline'
-  #             script: |
-  #               #! /bin/bash
+  - deployment: VMDeploy
+    displayName: VMDeploy
+    environment:
+      name:  'TEST-VM'
+      resourceType: VirtualMachine
+  #    tags: TAG NAME
+    strategy:
+      runOnce:
+        deploy:
+          steps:
+          - task: Bash@3
+            displayName: 'Install Dependencies'
+            inputs:
+              targetType: 'inline'
+              script: |
+                #! /bin/bash
 
-  #               sudo apt-get upgrade -y
-  #               sudo apt-get install python3-pip -y
-  #               sudo apt-get install unzip -y
-  #               sudo apt-get install -y chromium-browser
-  #               pip3 install selenium
-  #               export PATH=$PATH:some/path
+                # ------------ Install Dependencies ------------
+                sudo apt-get upgrade -y
+                sudo apt-get install python3-pip -y
+                sudo apt-get install unzip -y
+                sudo apt-get install -y chromium-browser
+                echo "Chromium Browser Installed"
+                pip3 install selenium
+                echo "Selenium Installed"
+
+                # ------------ Install Chromedriver -------------
+                sudo chmod 755 /usr/bin/chromedriver
+                echo "Changing to home directory"
+                cd /home/admin
+                wget https://chromedriver.storage.googleapis.com/87.0.4280.88/chromedriver_linux64.zip
+                unzip chromedriver_linux64.zip
+                sudo mv chromedriver /usr/bin
+                cd /usr/bin
+                sudo chmod a+x /usr/bin/chromedriver
+                cd /home/admin
+                rm -rf chromedriver_linux64.zip
+                echo "Removed chromedriver_linux64.zip"
+                chromium-browser -version
+                chromedriver --version
 
 
