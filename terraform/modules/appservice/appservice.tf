@@ -10,7 +10,7 @@ resource "azurerm_app_service_plan" "test" {
 }
 
 resource "azurerm_app_service" "test" {
-  name                = "test-appservice"
+  name                = "test-appservice-proj3"
   location            = var.location
   resource_group_name = var.resource_group
   app_service_plan_id = azurerm_app_service_plan.test.id
