@@ -1,5 +1,5 @@
 resource "azurerm_network_interface" "test" {
-  name                = test-nic
+  name                = "test-nic"
   location            = var.location
   resource_group_name = var.resource_group
 
@@ -16,10 +16,10 @@ resource "azurerm_linux_virtual_machine" "test" {
   location              = var.location
   resource_group_name   = var.resource_group
   size                  = "Standard_B1s"
-  admin_username        = "jadmin"
+  admin_username        = var.admin_username
   network_interface_ids = [azurerm_network_interface.test.id]
   admin_ssh_key {
-    username   = jadmin
+    username   = var.admin_username
     public_key = file("~/.ssh/id_rsa.pub")
   }
   os_disk {
