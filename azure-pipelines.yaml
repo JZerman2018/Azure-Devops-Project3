@@ -1,3 +1,12 @@
+trigger:
+  branches:
+    include:
+    - main
+  paths:
+    exclude:
+    - README.md
+    - .gitignore
+    - screenshots
 name: Azure Pipelines
 variables:
   python.version: '3.7.6'
