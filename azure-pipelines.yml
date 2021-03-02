@@ -23,6 +23,9 @@ stages:
     pool:
       vmImage: 'ubuntu-latest'
     steps:
+    - task: DownloadSecureFile@1
+      inputs:
+        secureFile: '.env'
 # Needed for Terraform VM deployment
     - task: InstallSSHKey@0
       inputs:
