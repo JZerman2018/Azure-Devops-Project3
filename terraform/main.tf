@@ -19,7 +19,7 @@ terraform {
     storage_account_name = "project3tstate"
     container_name       = "tstate"
     key                  = "terraform.tfstate"
-    access_key           = ACCOUNT_KEY # (VARIABLE)
+    access_key           =  "ACCOUNT_KEY"
   }
 }
 module "resource_group" {
