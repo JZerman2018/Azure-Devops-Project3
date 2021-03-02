@@ -19,7 +19,7 @@ stages:
 - stage: Provision
   jobs:
   - job: provision_azure_infrastructure
-    displayName: Providion Azure Infrastructure
+    displayName: Provision Azure Infrastructure
     pool:
       vmImage: 'ubuntu-latest'
     steps:
