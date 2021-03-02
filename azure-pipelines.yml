@@ -1,0 +1,44 @@
+# Starter pipeline
+# Start with a minimal pipeline that you can customize to build and deploy your code.
+# Add steps that build, run tests, deploy, and more:
+# https://aka.ms/yaml
+
+trigger:
+  branches:
+    include:
+      - main
+  paths:
+    exclude:
+    -  README.md
+    - .gitignore
+    - screenshots
+name: Azure Pipelines
+variables:
+  python.version: '3.9.1'
+  terraform.version: '0.14.4'
+stages:
+- stage: Build
+  jobs:
+  - job: Build
+    pool:
+      name: 'ubuntu-latest'
+    steps:
+# Needed for Terraform VM deployment
+    - task: InstallSSHKey@0
+      inputs:
+        knownHostsEntry: 'known_hosts'
+        sshPublicKey: '$(ssh_pub_key)'
+        sshKeySecureFile: 'id_rsa'
+    
+    - task: TerraformTaskV1@0
+      displayName: 'terraform init'
+      inputs:
+        provider: 'azurerm'
+        command: 'init'
+        workingDirectory: '$(System.DefaultWorkingDirectory)/terraform'
+        backendServiceArm: 'SPProject3-Terraform'
+        backendAzureRmResourceGroupName: 'project3-tstate'
+        backendAzureRmStorageAccountName: 'project3tstate'
+        backendAzureRmKey: 'terraform.tfstate'
+        backendAzureRmContainerName: 'tstate'
+        
