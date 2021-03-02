@@ -15,8 +15,8 @@ terraform {
 }
 terraform {
   backend "azurerm" {
-    resource_group_name  = "tstate"
-    storage_account_name = "tstate2021"
+    resource_group_name  = "project3-tstate"
+    storage_account_name = "project3tstate"
     container_name       = "tstate"
     key                  = "terraform.tfstate"
     access_key           = ACCOUNT_KEY # (VARIABLE)
