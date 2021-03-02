@@ -24,7 +24,7 @@ Configure the storage account and state backend. Replace the values below in ter
     * container_name
     * key
     * access_key
-[Click Here](https://docs.microsoft.com/en-us/azure/developer/terraform/store-state-in-azure-storage) for instructions on creating the Azure storage account and backend.
+[Click Here](https://docs.microsoft.com/en-us/azure/developer/terraform/store-state-in-azure-storage) for instructions on creating the Azure storage account and backend. You may also use the ```bashstoragescript.sh``` file in the repo to this.
 
 Create a Service Principal for Terraform and replace the below values in the terraform/environments/test/terraform.tfvars files with the output from the Azure CLI.
 
