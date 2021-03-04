@@ -48,6 +48,11 @@ stages:
         backendAzureRmKey: 'terraform.tfstate'
         backendAzureRmContainerName: 'tstate'
     - task: TerraformCLI@0
+      displayName: 'terraform validate'
+      inputs:
+        command: 'validate'
+        workingDirectory: '$(System.DefaultWorkingDirectory)/terraform'
+    - task: TerraformCLI@0
       inputs:
         command: 'plan'
         environmentServiceName: 'SPProject3-Terraform'
