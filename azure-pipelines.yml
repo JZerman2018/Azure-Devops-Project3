@@ -32,10 +32,14 @@ stages:
         knownHostsEntry: 'known_hosts'
         sshPublicKey: '$(ssh_pub_key)'
         sshKeySecureFile: 'id_rsa'
-    - task: charleszipp.azure-pipelines-tasks-terraform.azure-pipelines-tasks-terraform-installer.TerraformInstaller@0
+    # - task: charleszipp.azure-pipelines-tasks-terraform.azure-pipelines-tasks-terraform-installer.TerraformInstaller@0
+    #   displayName: 'Use Terraform latest'
+    #   inputs:
+    #     workingDirectory: '$(System.DefaultWorkingDirectory)/terraform'
+    - task: TerraformInstaller@0
       displayName: 'Use Terraform latest'
       inputs:
-        workingDirectory: '$(System.DefaultWorkingDirectory)/terraform'
+        terraformVersion: 'latest'
     - task: TerraformTaskV1@0
       displayName: 'terraform init'
       inputs:
@@ -63,5 +67,3 @@ stages:
         workingDirectory: '$(System.DefaultWorkingDirectory)/terraform'
         commandOptions: 'tfplan -auto-approve'
         environmentServiceNameAzureRM: 'SPProject3-Terraform'
-    
-    
