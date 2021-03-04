@@ -19,7 +19,7 @@ stages:
 - stage: Provision
   jobs:
   - job: provision_azure_infrastructure
-    displayName: Providion Azure Infrastructure
+    displayName: Provision Azure Infrastructure
     pool:
       vmImage: 'ubuntu-latest'
     steps:
@@ -47,6 +47,11 @@ stages:
         backendAzureRmStorageAccountName: 'project3tstate'
         backendAzureRmKey: 'terraform.tfstate'
         backendAzureRmContainerName: 'tstate'
+    - task: TerraformCLI@0
+      displayName: 'terraform validate'
+      inputs:
+        command: 'validate'
+        workingDirectory: '$(System.DefaultWorkingDirectory)/terraform'
     - task: TerraformCLI@0
       inputs:
         command: 'plan'
