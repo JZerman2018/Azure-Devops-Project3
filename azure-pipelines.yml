@@ -53,13 +53,22 @@ stages:
         provider: 'azurerm'
         command: 'validate'
         workingDirectory: '$(System.DefaultWorkingDirectory)/terraform'
-    - task: TerraformTaskV1@0
+    - task: TerraformCLI@0
       displayName: 'terraform plan'
       inputs:
-        provider: 'azurerm'
         command: 'plan'
         workingDirectory: '$(System.DefaultWorkingDirectory)/terraform'
-        environmentServiceNameAzureRM: 'SPProject3-Terraform'
+        environmentServiceName: 'SPProject3-Terraform'
+        runAzLogin: true
+        secureVarsFile: 'terraform.tfvars'
+        allowTelemetryCollection: true
+    # - task: TerraformTaskV1@0
+    #   displayName: 'terraform plan -lock=false'
+    #   inputs:
+    #     provider: 'azurerm'
+    #     command: 'plan'
+    #     workingDirectory: '$(System.DefaultWorkingDirectory)/terraform'
+    #     environmentServiceNameAzureRM: 'SPProject3-Terraform'
     - task: TerraformTaskV1@0
       displayName: 'terraform apply'    
       inputs:
