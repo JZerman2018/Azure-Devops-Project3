@@ -47,14 +47,24 @@ stages:
         backendAzureRmStorageAccountName: 'project3tstate'
         backendAzureRmKey: 'terraform.tfstate'
         backendAzureRmContainerName: 'tstate'
-    - task: TerraformCLI@0
+    - task: TerraformTaskV1@0
       displayName: 'terraform validate'
       inputs:
+        provider: 'azurerm'
         command: 'validate'
         workingDirectory: '$(System.DefaultWorkingDirectory)/terraform'
-    - task: TerraformCLI@0
+    - task: TerraformTaskV1@0
+      displayName: 'terraform plan'
       inputs:
+        provider: 'azurerm'
         command: 'plan'
-        environmentServiceName: 'SPProject3-Terraform'
-        runAzLogin: true
-        allowTelemetryCollection: true
+        workingDirectory: '$(System.DefaultWorkingDirectory)/terraform'
+        environmentServiceNameAzureRM: 'SPProject3-Terraform'
+    - task: TerraformTaskV1@0
+      displayName: 'terraform apply'    
+      inputs:
+        provider: 'azurerm'
+        command: 'apply'
+        workingDirectory: '$(System.DefaultWorkingDirectory)/terraform'
+        commandOptions: '-auto-approve'
+        environmentServiceNameAzureRM: 'SPProject3-Terraform'
