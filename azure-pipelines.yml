@@ -93,7 +93,7 @@ stages:
 - stage:
   jobs:
   - deployment: FakeRestAPI
-    displayName: FakeRestAPI Deploy
+    displayName: web
     pool:
       vmImage: 'Ubuntu-latest'
     environment:
@@ -111,21 +111,21 @@ stages:
               appType: webApp
               deploymentMethod: zipDeploy
               package: $(Pipeline.Workspace)/drop-fakerestapi/$(Build.BuildId)-fakerestapi.zip
-  - deployment: TEST
-    displayName: Deploy VM
-    environment:
-      name: 'TEST'
-      resourceType: VirtualMachine
-    strategy:
-      runOnce:
-        deploy:
-          steps:
-          - task: DownloadPipelineArtifact@2
-            displayName: 'Download Artifact'
-            inputs:
-              artifact: 'drop-project'
-              path: $(Build.SourcesDirectory)
-    # # Bash
+  # - deployment: TEST
+  #   displayName: Deploy VM
+  #   environment:
+  #     name: 'TEST'
+  #     resourceType: VirtualMachine
+  #   strategy:
+  #     runOnce:
+  #       deploy:
+  #         steps:
+  #         - task: DownloadPipelineArtifact@2
+  #           displayName: 'Download Artifact'
+  #           inputs:
+  #             artifact: 'drop-project'
+  #             path: $(Build.SourcesDirectory)
+  #   # # Bash
     # # Run a Bash script on macOS, Linux, or Windows
     # - task: Bash@3
     #   displayName: 'Run Postman Test'
