@@ -93,13 +93,12 @@ stages:
 - stage:
   jobs:
   - deployment: FakeRestAPI
-    displayName: web
+    displayName: FakeRestAPI Deploy
     pool:
       vmImage: 'Ubuntu-latest'
     environment:
       name: 'TEST'
       resourceType: 'VirtualMachine'
-      tags: web1
     strategy:
       runOnce:
         deploy:
@@ -112,20 +111,20 @@ stages:
               appType: webApp
               deploymentMethod: zipDeploy
               package: $(Pipeline.Workspace)/drop-fakerestapi/$(Build.BuildId)-fakerestapi.zip
-  - deployment: VMDeploy
-    displayName: Deploy VM
-    environment:
-      name: 'test-vm'
-      resourceType: VirtualMachine
-    strategy:
-      runOnce:
-        deploy:
-          steps:
-          - task: DownloadPipelineArtifact@2
-            displayName: 'Download Artifact'
-            inputs:
-              artifact: 'drop-project'
-              path: $(Build.SourcesDirectory)
+  # - deployment: test-vm
+  #   displayName: Deploy VM
+  #   environment:
+  #     name: 'TEST'
+  #     resourceType: VirtualMachine
+  #   strategy:
+  #     runOnce:
+  #       deploy:
+  #         steps:
+  #         - task: DownloadPipelineArtifact@2
+  #           displayName: 'Download Artifact'
+  #           inputs:
+  #             artifact: 'drop-project'
+  #             path: $(Build.SourcesDirectory)
     # # Bash
     # # Run a Bash script on macOS, Linux, or Windows
     # - task: Bash@3
