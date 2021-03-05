@@ -104,7 +104,7 @@ stages:
             displayName: 'Deploy Azure Web App'
             inputs:
               azureSubscription: 'SPProject3-Terraform'
-              appName: 'project3-devops'
+              appName: 'test-appservice-proj3'
               appType: webApp
               deploymentMethod: zipDeploy
               package: $(Pipeline.Workspace)/drop-fakerestapi/$(Build.BuildId)-fakerestapi.zip
