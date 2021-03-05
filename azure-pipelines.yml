@@ -41,7 +41,7 @@ stages:
       inputs:
         provider: 'azurerm'
         command: 'init'
-        workingDirectory: '$(System.DefaultWorkingDirectory)/terraform'
+        workingDirectory: '$(System.DefaultWorkingDirectory)/terraform/environments/test'
         backendServiceArm: 'SPProject3-Terraform'
         backendAzureRmResourceGroupName: 'project3-tstate'
         backendAzureRmStorageAccountName: 'project3tstate'
@@ -52,12 +52,12 @@ stages:
       inputs:
         provider: 'azurerm'
         command: 'validate'
-        workingDirectory: '$(System.DefaultWorkingDirectory)/terraform'
+        workingDirectory: '$(System.DefaultWorkingDirectory)/terraform/environments/test'
     - task: TerraformCLI@0
       displayName: 'terraform plan'
       inputs:
         command: 'plan'
-        workingDirectory: '$(System.DefaultWorkingDirectory)/terraform'
+        workingDirectory: '$(System.DefaultWorkingDirectory)/terraform/environments/test'
         environmentServiceName: 'SPProject3-Terraform'
         runAzLogin: true
         secureVarsFile: 'terraform.tfvars'
@@ -65,7 +65,7 @@ stages:
     - task: TerraformCLI@0
       inputs:
         command: 'apply'
-        workingDirectory: '$(System.DefaultWorkingDirectory)/terraform'
+        workingDirectory: '$(System.DefaultWorkingDirectory)/terraform/environments/test'
         environmentServiceName: 'SPProject3-Terraform'
         runAzLogin: true
         secureVarsFile: 'terraform.tfvars'
