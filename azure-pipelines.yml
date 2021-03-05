@@ -99,9 +99,8 @@ stages:
       inputs:
         targetType: 'inline'
         script: |
-          sudo adduser juwanazerman sudo
-          npm install -g newman
-          newman run StarterAPIs.json -e StarterAPIEnvironment.postman_environment.json --reporters cli,junit --reporter-junit-export newmanReport.xml
+          sudo npm install -g newman
+          sudo newman run StarterAPIs.json -e StarterAPIEnvironment.postman_environment.json --reporters cli,junit --reporter-junit-export newmanReport.xml
           workingDirectory: $(System.DefaultWorkingDirectory)/automatedtesting/postman
         #failOnStderr: false # Optional
         #noProfile: true # Optional
