@@ -41,7 +41,7 @@ stages:
       inputs:
         provider: 'azurerm'
         command: 'init'
-        workingDirectory: '$(System.DefaultWorkingDirectory)/terraform/environments/test'
+        workingDirectory: '$(System.DefaultWorkingDirectory)/terraform'
         backendServiceArm: 'SPProject3-Terraform'
         backendAzureRmResourceGroupName: 'project3-tstate'
         backendAzureRmStorageAccountName: 'project3tstate'
@@ -52,12 +52,12 @@ stages:
       inputs:
         provider: 'azurerm'
         command: 'validate'
-        workingDirectory: '$(System.DefaultWorkingDirectory)/terraform/environments/test'
+        workingDirectory: '$(System.DefaultWorkingDirectory)/terraform'
     - task: TerraformCLI@0
       displayName: 'terraform plan'
       inputs:
         command: 'plan'
-        workingDirectory: '$(System.DefaultWorkingDirectory)/terraform/environments/test'
+        workingDirectory: '$(System.DefaultWorkingDirectory)/terraform'
         environmentServiceName: 'SPProject3-Terraform'
         runAzLogin: true
         secureVarsFile: 'terraform.tfvars'
@@ -65,7 +65,7 @@ stages:
     - task: TerraformCLI@0
       inputs:
         command: 'apply'
-        workingDirectory: '$(System.DefaultWorkingDirectory)/terraform/environments/test'
+        workingDirectory: '$(System.DefaultWorkingDirectory)/terraform'
         environmentServiceName: 'SPProject3-Terraform'
         runAzLogin: true
         secureVarsFile: 'terraform.tfvars'
@@ -93,9 +93,13 @@ stages:
 - stage:
   jobs:
   - deployment: FakeRestAPI
+    displayName: web
     pool:
       vmImage: 'Ubuntu-latest'
-    environment: 'TEST'
+    environment:
+      name: 'TEST'
+      resourceType: 'VirtualMachine'
+      tags: web1
     strategy:
       runOnce:
         deploy:
@@ -108,7 +112,20 @@ stages:
               appType: webApp
               deploymentMethod: zipDeploy
               package: $(Pipeline.Workspace)/drop-fakerestapi/$(Build.BuildId)-fakerestapi.zip
-    
+  - deployment: VMDeploy
+    displayName: Deploy VM
+    environment:
+      name: 'test-vm'
+      resourceType: VirtualMachine
+    strategy:
+      runOnce:
+        deploy:
+          steps:
+          - task: DownloadPipelineArtifact@2
+            displayName: 'Download Artifact'
+            inputs:
+              artifact: 'drop-project'
+              path: $(Build.SourcesDirectory)
     # # Bash
     # # Run a Bash script on macOS, Linux, or Windows
     # - task: Bash@3
