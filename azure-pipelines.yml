@@ -71,3 +71,64 @@ stages:
         secureVarsFile: 'terraform.tfvars'
         commandOptions: '-auto-approve'
         allowTelemetryCollection: true
+    - task: ArchiveFiles@2
+      displayName: 'Archive FakeRestAPI'
+      inputs:
+        rootFolderOrFile: 'automatedtesting\jmeter\fakerestapi'
+        includeRootFolder: false
+        archiveType: 'zip'
+        archiveFile: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId)-fakerestapi.zip'
+    - publish: $(Build.ArtifactStagingDirectory)/$(Build.BuildId)-fakerestapi.zip
+      displayName: 'Upload Package'
+      artifact: drop-fakerestapi
+    # Archive files
+    # Compress files into .7z, .tar.gz, or .zip
+    - task: ArchiveFiles@2
+      displayName: 'Archive Automated Tests'
+      inputs:
+        rootFolderOrFile: 'automatedtesting' 
+        includeRootFolder: false
+        archiveType: 'zip'
+        archiveFile: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId)-automatedtests.zip' 
+    
+    
+    # Bash
+    # Run a Bash script on macOS, Linux, or Windows
+    - task: Bash@3
+      displayName: 'Run Postman Test'
+      inputs:
+        targetType: 'inline'
+        script: |
+          npm install -g newman
+          newman run StarterAPIs.json -e StarterAPIEnvironment.postman_environment.json --reporters cli,junit --reporter-junit-export newmanReport.xml
+          workingDirectory: $(System.DefaultWorkingDirectory)/automatedtesting/postman
+        #failOnStderr: false # Optional
+        #noProfile: true # Optional
+        #noRc: true # Optional
+    - task: PublishTestResults@2
+      inputs:
+        testResultsFormat: 'JUnit'
+        testResultsFiles: '*.xml'
+        searchFolder: '$(System.DefaultWorkingDirectory)/automatedtesting/postman'
+        mergeTestResults: true
+        testRunTitle: 'Publish Postman Newman Results'
+    
+
+    
+# - stage:
+#   jobs:
+#   - deployment: FakeRestAPI
+#     pool:
+#       vmImage: 'Ubuntu-latest'
+#     environment: 'TEST'
+#     strategy:
+#       runOnce:
+#         deploy:
+#           steps:
+#           - task: AzureWebApp@1
+#             displayName: 'Deploy Azure Web App'
+#             inputs:
+#               azureSubscription: ''
+#               appName: 'project3-devops'
+#               appType: webApp
+#               package: $(Pipeline.Workspace)/drop-fakerestapi/$(Build.BuildId)-fakerestapi.zip
