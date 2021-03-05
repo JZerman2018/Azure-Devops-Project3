@@ -111,40 +111,40 @@ stages:
               appType: webApp
               deploymentMethod: zipDeploy
               package: $(Pipeline.Workspace)/drop-fakerestapi/$(Build.BuildId)-fakerestapi.zip
-  # - deployment: TEST
-  #   displayName: Deploy VM
-  #   environment:
-  #     name: 'TEST'
-  #     resourceType: VirtualMachine
-  #   strategy:
-  #     runOnce:
-  #       deploy:
-  #         steps:
-  #         - task: DownloadPipelineArtifact@2
-  #           displayName: 'Download Artifact'
-  #           inputs:
-  #             artifact: 'drop-project'
-  #             path: $(Build.SourcesDirectory)
+  - deployment: TEST
+    displayName: Deploy VM
+    environment:
+      name: 'TEST'
+      resourceType: VirtualMachine
+    strategy:
+      runOnce:
+        deploy:
+          steps:
+          - task: DownloadPipelineArtifact@2
+            displayName: 'Download Artifact'
+            inputs:
+              artifact: 'drop-fakerestapi'
+              path: $(Build.SourcesDirectory)
   #   # # Bash
     # # Run a Bash script on macOS, Linux, or Windows
-    # - task: Bash@3
-    #   displayName: 'Run Postman Test'
-    #   inputs:
-    #     targetType: 'inline'
-    #     script: |
-    #       sudo npm install -g newman
-    #       sudo newman run StarterAPIs.json -e StarterAPIEnvironment.postman_environment.json --reporters cli,junit --reporter-junit-export newmanReport.xml
-    #       workingDirectory: $(System.DefaultWorkingDirectory)/automatedtesting/postman
-    #     #failOnStderr: false # Optional
-    #     #noProfile: true # Optional
-    #     #noRc: true # Optional
-    # - task: PublishTestResults@2
-    #   inputs:
-    #     testResultsFormat: 'JUnit'
-    #     testResultsFiles: '*.xml'
-    #     searchFolder: '$(System.DefaultWorkingDirectory)/automatedtesting/postman'
-    #     mergeTestResults: true
-    #     testRunTitle: 'Publish Postman Newman Results'
-    
+          - task: Bash@3
+            displayName: 'Run Postman Test'
+            inputs:
+              targetType: 'inline'
+              script: |
+                sudo npm install -g newman
+                sudo newman run StarterAPIs.json -e StarterAPIEnvironment.postman_environment.json --reporters cli,junit --reporter-junit-export newmanReport.xml
+                workingDirectory: $(System.DefaultWorkingDirectory)/automatedtesting/postman
+              #failOnStderr: false # Optional
+              #noProfile: true # Optional
+              #noRc: true # Optional
+          - task: PublishTestResults@2
+            inputs:
+              testResultsFormat: 'JUnit'
+              testResultsFiles: '*.xml'
+              searchFolder: '$(System.DefaultWorkingDirectory)/automatedtesting/postman'
+              mergeTestResults: true
+              testRunTitle: 'Publish Postman Newman Results'
+          
 
-    
+          
