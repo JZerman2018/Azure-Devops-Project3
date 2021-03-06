@@ -116,7 +116,7 @@ stages:
               deployToSlotOrASE: true
               ResourceGroupName: 'azuredevopsproj3'
               SlotName: 'production'
-              packageForLinux: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId)-fakerestapi.zip'
+              packageForLinux: 'drop-fakerestapi'
           - task: Bash@3
             inputs:
               targetType: 'inline'
