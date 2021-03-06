@@ -107,14 +107,16 @@ stages:
       runOnce:
         deploy:
           steps:
-          - task: AzureWebApp@1
-            displayName: 'Deploy Azure Web App'
+          - task: AzureRmWebAppDeployment@4
             inputs:
+              ConnectionType: 'AzureRM'
               azureSubscription: 'SPProject3-Terraform'
-              appName: 'test-appservice-proj3'
-              appType: webApp
-              deploymentMethod: zipDeploy
-              package: $(Pipeline.Workspace)/drop-fakerestapi/$(Build.BuildId)-fakerestapi.zip
+              appType: 'webAppLinux'
+              WebAppName: 'test-appservice-proj3'
+              deployToSlotOrASE: true
+              ResourceGroupName: 'azuredevopsproj3'
+              SlotName: 'production'
+              packageForLinux: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId)-fakerestapi.zip'
           - task: Bash@3
             inputs:
               targetType: 'inline'
@@ -143,5 +145,6 @@ stages:
           #     mergeTestResults: true
           #     testRunTitle: 'Publish Postman Newman Results'
           
+             
 
           
