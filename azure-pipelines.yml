@@ -110,7 +110,7 @@ stages:
           - task: AzureRmWebAppDeployment@4
             inputs:
               ConnectionType: 'AzureRM'
-              azureSubscription: 'SPProject3-Terraform'
+              azureSubscription: 'SPProject3'
               appType: 'webAppLinux'
               WebAppName: 'test-appservice-proj3'
               deployToSlotOrASE: true
