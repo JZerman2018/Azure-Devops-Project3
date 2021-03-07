@@ -53,18 +53,98 @@ stages:
         provider: 'azurerm'
         command: 'validate'
         workingDirectory: '$(System.DefaultWorkingDirectory)/terraform'
-    - task: TerraformTaskV1@0
+    - task: TerraformCLI@0
       displayName: 'terraform plan'
       inputs:
-        provider: 'azurerm'
         command: 'plan'
         workingDirectory: '$(System.DefaultWorkingDirectory)/terraform'
-        environmentServiceNameAzureRM: 'SPProject3-Terraform'
-    - task: TerraformTaskV1@0
-      displayName: 'terraform apply'    
+        environmentServiceName: 'SPProject3-Terraform'
+        runAzLogin: true
+        secureVarsFile: 'terraform.tfvars'
+        allowTelemetryCollection: true
+    - task: TerraformCLI@0
       inputs:
-        provider: 'azurerm'
         command: 'apply'
         workingDirectory: '$(System.DefaultWorkingDirectory)/terraform'
+        environmentServiceName: 'SPProject3-Terraform'
+        runAzLogin: true
+        secureVarsFile: 'terraform.tfvars'
         commandOptions: '-auto-approve'
-        environmentServiceNameAzureRM: 'SPProject3-Terraform'
+        allowTelemetryCollection: true
+    - task: ArchiveFiles@2
+      displayName: 'Archive FakeRestAPI'
+      inputs:
+        rootFolderOrFile: 'automatedtesting/jmeter/fakerestapi'
+        includeRootFolder: false
+        archiveType: 'zip'
+        archiveFile: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId)-fakerestapi.zip'
+    - publish: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId)-fakerestapi.zip'
+      displayName: 'Upload Package'
+      artifact: drop-fakerestapi
+    # Archive files
+    # Compress files into .7z, .tar.gz, or .zip
+    - task: ArchiveFiles@2
+      displayName: 'Archive Automated Tests'
+      inputs:
+        rootFolderOrFile: 'automatedtesting' 
+        includeRootFolder: false
+        archiveType: 'zip'
+        archiveFile: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId)-automatedtests.zip' 
+    - publish: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId)-automatedtests.zip'
+      displayName: 'Upload Test Package'
+      artifact: drop-automatedtests
+- stage:
+  jobs:
+  - deployment: TEST
+    displayName: Deploy VM
+    environment:
+      name: 'TEST'
+      resourceType: VirtualMachine
+    pool:
+      vmImage: 'Ubuntu-latest'
+    
+    strategy:
+      runOnce:
+        deploy:
+          steps:
+          - task: AzureRmWebAppDeployment@4
+            inputs:
+              ConnectionType: 'AzureRM'
+              azureSubscription: 'SPProject3'
+              appType: 'webAppLinux'
+              WebAppName: 'test-appservice-proj3'
+              deployToSlotOrASE: true
+              ResourceGroupName: 'azuredevopsproj3'
+              SlotName: 'production'
+              packageForLinux: '$(Pipeline.Workspace)/drop-fakerestapi/$(Build.BuildId)-fakerestapi.zip'
+          - task: Bash@3
+            inputs:
+              targetType: 'inline'
+              script: |
+                # Write your commands here
+                
+                echo 'FakeRestAPI Running'
+  #   # # Bash
+    # # Run a Bash script on macOS, Linux, or Windows
+          # - task: Bash@3
+          #   displayName: 'Run Postman Test'
+          #   inputs:
+          #     targetType: 'inline'
+          #     script: |
+          #       npm install -g newman
+          #       newman run StarterAPIs.json -e StarterAPIEnvironment.postman_environment.json --reporters cli,junit --reporter-junit-export newmanReport.xml
+          #       workingDirectory: $(System.DefaultWorkingDirectory)/automatedtesting/postman
+          #     #failOnStderr: false # Optional
+          #     #noProfile: true # Optional
+          #     #noRc: true # Optional
+          # - task: PublishTestResults@2
+          #   inputs:
+          #     testResultsFormat: 'JUnit'
+          #     testResultsFiles: '*.xml'
+          #     searchFolder: '$(System.DefaultWorkingDirectory)/automatedtesting/postman'
+          #     mergeTestResults: true
+          #     testRunTitle: 'Publish Postman Newman Results'
+          
+             
+
+          
