@@ -46,12 +46,28 @@ Login to the Service Principal using the following command with you credentials 
 [Click Here](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/guides/service_principal_client_secret) if you need help with the steps for creating a service principal.
 #### Azure DevOps
 
-1. Import the **`azure-pipelines.yaml`** and **`StarterAPIs.json`** files into Azure DevOps.
-2. Create a new Azure Pipeline from the **`azure-pipelines.yaml`** file.
-3. In Azure Devops go to Project Settings > Service Connections > New Service Connection > Azure Resource Manage > Next > Service Principal (Automatic) > Next > Subscription. After choosing your subscription provide a name for the service connection.
-4. If the pipeline runs now it will fail since no resources are provisioned yet in Azure.
-5. Create your Azure resources (Most can be provisioned via Terraform and I created mine locally running the Terraform commands with Azure CLI).
-6. Create an SSH key to log in to your VM. [Click Here](https://docs.microsoft.com/en-us/azure/virtual-machines/linux/mac-create-ssh-keys) for instructions on setting up an SSH key.
+1. Create a new Azure Pipeline from the **`azure-pipelines.yaml`** file.
+
+2. Create a new service connection: In Azure Devops go to Project Settings > Service Connections > New Service Connection > Azure Resource Manager > Next > Service Principal (Automatic) > Next > Subscription. After choosing your subscription provide a name for the service connection.
+
+3. If the pipeline runs now it will fail since no resources are provisioned yet in Azure.
+
+4. Create an SSH key to log in to your VM. [Click Here](https://docs.microsoft.com/en-us/azure/virtual-machines/linux/mac-create-ssh-keys) for instructions on setting up an SSH key.
+
+5. This SSH key can be saved and added to Azure Pipelines as a secure file. I also loaded my terraform.tfvars to Azure Pipelines as a secure file along with a .env file with my access-key.
+
+6. Create your Azure resources (Most can be provisioned via Terraform using the Pipeline by adding tasks and jobs to the `azure-pipelines.yml` file utilizing ```terraform init```, ```terraform plan```, and ```terraform apply``` commands).
+
+7. Once the resources are deployed you will have to follow the instructions on setting up an environment in Azure Pipelines to register the Linux VM so your app can be deployed to it. You can find that documentation [here](https://docs.microsoft.com/en-us/azure/devops/pipelines/process/environments-virtual-machines?view=azure-devops). In Azure DevOps under Pipelines > Environments > TEST > Add resource > Select "Virtual Machines" > Next > Under Operating System select "Linux".  You will be given a registration script to copy. SSH into your VM and paste this script into the terminal and run it. This will register your VM and allow Azure Pipelines to act as an agent to run commands on it.
+
+8. Build the FakeRestAPI and Automated Testing artifacts and publish them to the artifact staging directory in the Pipeline.
+
+9. Deploy the FakeRestAPI to your App Service on your VM. The URL for my webapp is https://test-appservice-proj3.azurewebsites.net/. It should look like the image below.
+
+![Fake Rest Deploy](screenshots/ScreenshotFakeRestDeploy.png)
+
+
+
 
 #### Selenium
 
