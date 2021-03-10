@@ -139,33 +139,16 @@ stages:
               newman run automatedtesting/postman/RegressionTest.postman_collection.json  --reporters cli,junit --reporter-junit-export newmanReport.xml
               echo 'Running Data Validation Test'
               newman run automatedtesting/postman/DataValidation.postman_collection.json  --reporters cli,junit --reporter-junit-export newmanReport1.xml
+              cat $(System.DefaultWorkingDirectory)/automatedtesting/postman)/newmanReport.xml
+              cat $(System.DefaultWorkingDirectory)/automatedtesting/postman)/newmanReport1.xml
         - task: PublishTestResults@2
           inputs:
             testResultsFormat: 'JUnit'
-            testResultsFiles: '*.xml'
+            testResultsFiles: $(System.DefaultWorkingDirectory)/automatedtesting/postman/*.xml'
             searchFolder: '$(System.DefaultWorkingDirectory)/automatedtesting/postman'
             mergeTestResults: true
             testRunTitle: 'Publish Postman Newman Results'
-  #   # # Bash
-    # # Run a Bash script on macOS, Linux, or Windows
-          # - task: Bash@3
-          #   displayName: 'Run Postman Test'
-          #   inputs:
-          #     targetType: 'inline'
-          #     script: |
-          #       npm install -g newman
-          #       newman run StarterAPIs.json -e StarterAPIEnvironment.postman_environment.json --reporters cli,junit --reporter-junit-export newmanReport.xml
-          #       workingDirectory: $(System.DefaultWorkingDirectory)/automatedtesting/postman
-          #     #failOnStderr: false # Optional
-          #     #noProfile: true # Optional
-          #     #noRc: true # Optional
-          # - task: PublishTestResults@2
-          #   inputs:
-          #     testResultsFormat: 'JUnit'
-          #     testResultsFiles: '*.xml'
-          #     searchFolder: '$(System.DefaultWorkingDirectory)/automatedtesting/postman'
-          #     mergeTestResults: true
-          #     testRunTitle: 'Publish Postman Newman Results'
+  
           
              
 
