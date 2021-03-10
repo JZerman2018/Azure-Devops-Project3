@@ -140,11 +140,10 @@ stages:
               echo 'Running Data Validation Test'
               newman run automatedtesting/postman/DataValidation.postman_collection.json  --reporters cli,junit
         - task: PublishTestResults@2
+          displayName: 'Publish Postman Newman Results'
           inputs:
             testResultsFormat: 'JUnit'
             testResultsFiles: 'newman/report-*.xml'
-            mergeTestResults: true
-            testRunTitle: 'Publish Postman Newman Results'
   
           
              
