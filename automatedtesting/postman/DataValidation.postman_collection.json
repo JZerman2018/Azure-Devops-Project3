@@ -49,8 +49,7 @@
 					]
 				}
 			},
-			"response": []
-			},
+			"response": [
 				{
 					"name": "Create Employee",
 					"originalRequest": {
@@ -200,6 +199,8 @@
 				}
 			},
 			"response": []
+				}
+			]
 		}
 	]
 }
