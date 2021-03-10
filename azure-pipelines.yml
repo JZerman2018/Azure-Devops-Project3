@@ -133,10 +133,9 @@ stages:
             sudo npm install -g newman
             echo 'Starting Tests...'
             echo 'Running Regression Test'
-            newman run automatedtesting/postman/RegressionTest.postman_collection.json --reporters cli,junit --reporter-junit-export newmanReport.xml
-            workingDirectory: $(System.DefaultWorkingDirectory)/automatedtesting/postman
+            newman run automatedtesting/postman/RegressionTest.postman_collection.json -e automatedtesting/postman/StarterAPIEnvironment.postman_environment.json --reporters cli,junit --reporter-junit-export newmanReport.xml
             echo 'Running Data Validation Test'
-            newman run automatedtesting/postman/DataValidation.postman_collection.json --reporters cli,junit --reporter-junit-export newmanReport1.xml
+            newman run automatedtesting/postman/DataValidation.postman_collection.json -e automatedtesting/postman/StarterAPIEnvironment.postman_environment.json --reporters cli,junit --reporter-junit-export newmanReport1.xml
 
         - task: PublishTestResults@2
           inputs:
