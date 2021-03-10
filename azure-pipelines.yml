@@ -81,8 +81,6 @@ stages:
     - publish: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId)-fakerestapi.zip'
       displayName: 'Upload Package'
       artifact: drop-fakerestapi
-    # Archive files
-    # Compress files into .7z, .tar.gz, or .zip
     - task: ArchiveFiles@2
       displayName: 'Archive Automated Tests'
       inputs:
@@ -124,6 +122,33 @@ stages:
                 # Write your commands here
                 
                 echo 'FakeRestAPI Running'
+- stage: postDeployment
+  displayName: 'Post-Deployment'
+  jobs:
+    - job: runnewman
+      
+      steps:
+        - task: Bash@3
+          displayName: 'Run Postman/Newman Tests'
+          inputs:
+            targetType: 'inline'
+            script: |
+              sudo apt-get update
+              sudo apt-get upgrade -y
+              sudo npm install -g newman
+              echo 'Starting Tests...'
+              echo 'Running Regression Test'
+              newman run automatedtesting/postman/RegressionTest.postman_collection.json -e automatedtesting/postman/StarterAPIEnvironment.postman_environment.json --reporters cli,junit --reporter-junit-export newmanReport.xml
+              echo 'Running Data Validation Test'
+              newman run automatedtesting/postman/DataValidation.postman_collection.json -e automatedtesting/postman/StarterAPIEnvironment.postman_environment.json --reporters cli,junit --reporter-junit-export newmanReport1.xml
+              workingDirectory: $(System.DefaultWorkingDirectory)/automatedtesting/postman
+        - task: PublishTestResults@2
+          inputs:
+            testResultsFormat: 'JUnit'
+            testResultsFiles: '*.xml'
+            searchFolder: '$(System.DefaultWorkingDirectory)/automatedtesting/postman'
+            mergeTestResults: true
+            testRunTitle: 'Publish Postman Newman Results'
   #   # # Bash
     # # Run a Bash script on macOS, Linux, or Windows
           # - task: Bash@3
