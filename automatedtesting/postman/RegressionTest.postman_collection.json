@@ -49,37 +49,7 @@
 					]
 				}
 			},
-			"response": [
-				{
-					"name": "Create Employee",
-					"originalRequest": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n    \"name\": \"{{name}}\",\n    \"salary\": \"{{salary}}\",\n    \"age\": \"{{age}}\"\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "http://dummy.restapiexample.com/api/v1/create",
-							"protocol": "http",
-							"host": [
-								"dummy",
-								"restapiexample",
-								"com"
-							],
-							"path": [
-								"api",
-								"v1",
-								"create"
-							]
-					}
-				},
-				"response":[]
+			"response": []
 			},
 			{
 			"name": "Get All Employees",
@@ -211,9 +181,8 @@
 				}
 			},
 			"response": []
-				}
-			]
-		}
-	]
-}
+			}
+		]
+	}
+
 
