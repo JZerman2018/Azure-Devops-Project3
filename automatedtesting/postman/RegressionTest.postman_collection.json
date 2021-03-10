@@ -49,7 +49,8 @@
 					]
 				}
 			},
-			"response": [
+			"response": []
+		},
 				{
 					"name": "Create Employee",
 					"originalRequest": {
@@ -77,14 +78,9 @@
 								"v1",
 								"create"
 							]
-						}
-					},
-					"_postman_previewlanguage": null,
-					"header": null,
-					"cookie": [],
-					"body": null
-				}
-			]
+					}
+				},
+		"response": []
 		},
 		{
 			"name": "Get All Employees",
@@ -270,5 +266,6 @@
 			},
 			"response": []
 		}
-	]
+	],
+	"protocolProfileBehavior": {}
 }
