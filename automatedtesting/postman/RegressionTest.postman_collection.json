@@ -79,14 +79,9 @@
 							]
 					}
 				},
-				"_postman_previewlanguage": null,
-					"header": null,
-					"cookie": [],
-					"body": null
-				}
-			]
-		},
-		{
+				"response":[]
+			},
+			{
 			"name": "Get All Employees",
 			"event": [
 				{
@@ -216,8 +211,9 @@
 				}
 			},
 			"response": []
+				}
+			]
 		}
-
-	],
-	"protocolProfileBehavior": {}
+	]
 }
+
