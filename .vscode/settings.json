@@ -4,5 +4,6 @@
         "fakerestapi",
         "rbac",
         "tfvars"
-    ]
+    ],
+    "python.pythonPath": "C:\\Python39\\python.exe"
 }
