@@ -126,17 +126,22 @@ stages:
   displayName: 'Post-Deployment'
   jobs:
     - job: runnewman
-      displayName: 'Run Postman/Newman Test'
+      
       steps:
-        - script: |
-            sudo apt-get upgrade -y
-            sudo npm install -g newman
-            echo 'Starting Tests...'
-            echo 'Running Regression Test'
-            newman run automatedtesting/postman/RegressionTest.postman_collection.json -e automatedtesting/postman/StarterAPIEnvironment.postman_environment.json --reporters cli,junit --reporter-junit-export newmanReport.xml
-            echo 'Running Data Validation Test'
-            newman run automatedtesting/postman/DataValidation.postman_collection.json -e automatedtesting/postman/StarterAPIEnvironment.postman_environment.json --reporters cli,junit --reporter-junit-export newmanReport1.xml
-
+        - task: Bash@3
+          displayName: 'Run Postman/Newman Tests'
+          inputs:
+            targetType: 'inline'
+            script: |
+              sudo apt-get update
+              sudo apt-get upgrade -y
+              sudo npm install -g newman
+              echo 'Starting Tests...'
+              echo 'Running Regression Test'
+              newman run automatedtesting/postman/RegressionTest.postman_collection.json -e automatedtesting/postman/StarterAPIEnvironment.postman_environment.json --reporters cli,junit --reporter-junit-export newmanReport.xml
+              echo 'Running Data Validation Test'
+              newman run automatedtesting/postman/DataValidation.postman_collection.json -e automatedtesting/postman/StarterAPIEnvironment.postman_environment.json --reporters cli,junit --reporter-junit-export newmanReport1.xml
+              workingDirectory: $(System.DefaultWorkingDirectory)/automatedtesting/postman
         - task: PublishTestResults@2
           inputs:
             testResultsFormat: 'JUnit'
