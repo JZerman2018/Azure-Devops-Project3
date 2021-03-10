@@ -49,8 +49,7 @@
 					]
 				}
 			},
-			"response": []
-		},
+			"response": [
 				{
 					"name": "Create Employee",
 					"originalRequest": {
@@ -80,7 +79,12 @@
 							]
 					}
 				},
-		"response": []
+				"_postman_previewlanguage": null,
+					"header": null,
+					"cookie": [],
+					"body": null
+				}
+			]
 		},
 		{
 			"name": "Get All Employees",
@@ -212,60 +216,8 @@
 				}
 			},
 			"response": []
-		},
-		{
-			"name": "Update Employee",
-			"event": [
-				{
-					"listen": "test",
-					"script": {
-						"exec": [
-							"pm.test(\"Status code is 200\", function () {\r",
-							"    pm.response.to.have.status(200);\r",
-							"});\r",
-							"pm.test(\"Successful response\", function () {\r",
-							"    pm.expect(pm.response.text()).to.include(\"success\");\r",
-							"});"
-						],
-						"type": "text/javascript"
-					}
-				}
-			],
-			"request": {
-				"method": "PUT",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "{\r\n    \"name\": \"{{newname}}\",\r\n    \"salary\": \"{{newsalary}}\",\r\n    \"age\": \"{{newage}}\"\r\n}"
-				},
-				"url": {
-					"raw": "http://dummy.restapiexample.com/api/v1/update/{{id}}?id=12&newname=Carly Jensen",
-					"protocol": "http",
-					"host": [
-						"dummy",
-						"restapiexample",
-						"com"
-					],
-					"path": [
-						"api",
-						"v1",
-						"update",
-						"{{id}}"
-					],
-					"query": [
-						{
-							"key": "id",
-							"value": "12"
-						},
-						{
-							"key": "newname",
-							"value": "Carly Jensen"
-						}
-					]
-				}
-			},
-			"response": []
 		}
+
 	],
 	"protocolProfileBehavior": {}
 }
