@@ -133,7 +133,7 @@ stages:
           inputs:
             targetType: 'inline'
             script: |
-              sudo npm install -g newman
+              sudo npm install -g newman reporter
               echo 'Starting Tests...'
               echo 'Running Regression Test'
               newman run automatedtesting/postman/RegressionTest.postman_collection.json  --reporters cli,junit --reporter-junit-export newmanReport.xml
@@ -142,8 +142,8 @@ stages:
         - task: PublishTestResults@2
           inputs:
             testResultsFormat: 'JUnit'
-            testResultsFiles: $(System.DefaultWorkingDirectory)/automatedtesting/postman/*.xml'
-            searchFolder: '$(System.DefaultWorkingDirectory)/automatedtesting/postman'
+            testResultsFiles: '$(System.DefaultWorkingDirectory)/automatedtesting/postman/*.xml'
+            searchFolder: $(System.DefaultWorkingDirectory)/automatedtesting/postman
             mergeTestResults: true
             testRunTitle: 'Publish Postman Newman Results'
   
