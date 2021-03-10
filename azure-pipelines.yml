@@ -133,8 +133,6 @@ stages:
           inputs:
             targetType: 'inline'
             script: |
-              sudo apt-get update
-              sudo apt-get upgrade -y
               sudo npm install -g newman
               echo 'Starting Tests...'
               echo 'Running Regression Test'
