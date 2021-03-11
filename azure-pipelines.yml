@@ -146,7 +146,46 @@ stages:
             testResultsFormat: 'JUnit'
             testRunTitle: Data and Regression Tests
             testResultsFiles: '**/newman-*.xml'
-  
+    - job: SeleniumTest
+      steps:
+        - task: Bash@3
+          inputs:
+            targetType: 'inline'
+            script: |
+              # Write your commands here
+              #---------------Installing Dependencies------------------
+              sudo apt-get install python3-pip -y
+              sudo apt-get install unzip -y
+              sudo apt-get install -y chromium-browser
+              sudo apt-get install -y chromium-chromdriver
+              python3 -m pip install --upgrade pip
+              pip3 install selenium
+              #-------------Installing Chromedriver--------------------
+              sudo chmod 755 /usr/bin/chromedriver
+              cd /home/jadmin
+              wget https://chromedriver.storage.googleapis.com/89.0.4389.23/chromedriver_linux64.zip
+              unzip chromedriver_linux64.zip
+              sudo mv chromedriver /usr/bin
+              cd /usr/bin
+              sudo chmod a+x /usr/bin/chromedriver
+              rm -rf chromedriver_linux.zip
+              chromium-browser -version
+              chromedriver --version
+
+              # ---------------Agent Log Analytics------------------
+
+
+              # export PATH=$PATH:/usr/bin/chromium-browser/
+              # python3 -c "import selenium; print('Selenium Version:')"
+              # Install Log Analytics agent on Linux computers (only need to run once)
+              # wget https://raw.githubusercontent.com/Microsoft/OMS-Agent-for-Linux/master/installer/scripts/onboard_agent.sh
+              # sh onboard_agent.sh -w ${AZURE_LOG_ANALYTICS_ID} -s ${AZURE_LOG_ANALYTICS_PRIMARY_KEY}
+              # sudo /opt/microsoft/omsagent/bin/service_control restart ${AZURE_LOG_ANALYTICS_ID}
+                # env:  # To use secret variables in a script, we must explicitly map them as environment variables.
+                # AZURE_LOG_ANALYTICS_ID: $(AZURE_LOG_ANALYTICS_ID)
+                # AZURE_LOG_ANALYTICS_PRIMARY_KEY: $(AZURE_LOG_ANALYTICS_PRIMARY_KEY)
+                # displayName: Configure selenium
+
           
              
 
