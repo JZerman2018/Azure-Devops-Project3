@@ -136,16 +136,16 @@ stages:
               sudo npm install -g newman reporter
               echo 'Starting Tests...'
               echo 'Running Regression Test'
-              newman run automatedtesting/postman/RegressionTest.postman_collection.json  --reporters cli,junit --reporter-junit-export newmanReport.xml
+              newman run automatedtesting/postman/RegressionTest.postman_collection.json  --delay-request 10000 --reporters cli,junit 
               echo 'Running Data Validation Test'
-              newman run automatedtesting/postman/DataValidation.postman_collection.json  --reporters cli,junit --reporter-junit-export newmanReport1.xml
+              newman run automatedtesting/postman/DataValidation.postman_collection.json  --delay-request 10000 --reporters cli,junit
         - task: PublishTestResults@2
+          displayName: 'Publish Postman Newman Results **/newman-*.xml'
+          condition: always()
           inputs:
             testResultsFormat: 'JUnit'
-            testResultsFiles: '$(System.DefaultWorkingDirectory)/automatedtesting/postman/*.xml'
-            searchFolder: $(System.DefaultWorkingDirectory)/automatedtesting/postman
-            mergeTestResults: true
-            testRunTitle: 'Publish Postman Newman Results'
+            testRunTitle: Data and Regression Tests
+            testResultsFiles: '**/newman-*.xml'
   
           
              
