@@ -170,7 +170,6 @@ stages:
               pip3 install selenium
               #-------------Installing Chromedriver--------------------
               sudo chmod 755 /usr/bin/chromedriver
-              cd /home/jadmin
               wget https://chromedriver.storage.googleapis.com/89.0.4389.23/chromedriver_linux64.zip
               unzip chromedriver_linux64.zip
               sudo mv chromedriver /usr/bin
@@ -180,10 +179,11 @@ stages:
               chromium-browser -version
               chromedriver --version
               sudo mkdir -p /var/logs/selenium
+              sudo chmod 777 /var/logs/selenium
               sudo touch /var/logs/selenium/seleniumlogfile.txt
               sudo chmod 775 -R /var/logs
               sudo chmod 777 /var/logs/selenium/seleniumlogfile.txt
-              sudo python3 $(Pipeline.Workspace)/drop-automatedtests/*-automatedtests/selenium/login.py 2>&1 | tee -a /var/log/selenium/seleniumlogfile.txt
+              sudo python3 $(Pipeline.Workspace)/drop-automatedtests/$(Build.BuildId)-automatedtests/selenium/login.py 2>&1 | tee -a /var/log/selenium/seleniumlogfile.txt
 
               # ---------------Agent Log Analytics------------------
 
