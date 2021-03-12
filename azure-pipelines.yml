@@ -150,11 +150,11 @@ stages:
             testResultsFiles: '**/newman-*.xml'
     - job: SeleniumTest
       steps:
-        - task: ExtractFiles@1
-          inputs:
-            archiveFilePatterns: '$(Pipeline.Workspace)/drop-automatedtests/$(Build.BuildId)-automatedtests.zip'
-            destinationFolder: '$(Pipeline.Workspace)/automatedtests'
-            cleanDestinationFolder: true
+        # - task: ExtractFiles@1
+        #   inputs:
+        #     archiveFilePatterns: '$(Pipeline.Workspace)/drop-automatedtests/$(Build.BuildId)-automatedtests.zip'
+        #     destinationFolder: '$(Pipeline.Workspace)/automatedtests'
+        #     cleanDestinationFolder: true
         - task: Bash@3
           inputs:
             targetType: 'inline'
@@ -183,7 +183,7 @@ stages:
               sudo touch /var/logs/selenium/seleniumlogfile.txt
               sudo chmod 775 -R /var/logs
               sudo chmod 777 /var/logs/selenium/seleniumlogfile.txt
-              sudo python3 $(Pipeline.Workspace)/automatedtests/selenium/login.py 2>&1 | tee -a /var/log/selenium/seleniumlogfile.txt
+              sudo python3 $(Pipeline.Workspace)/drop-automatedtests/*-automatedtests/selenium/login.py 2>&1 | tee -a /var/log/selenium/seleniumlogfile.txt
 
               # ---------------Agent Log Analytics------------------
 
