@@ -178,12 +178,13 @@ stages:
               rm -rf chromedriver_linux.zip
               chromium-browser -version
               chromedriver --version
+              #------------------Running Test-----------------------
               sudo mkdir -p /var/logs/selenium
               sudo chmod 777 /var/logs/selenium
               sudo touch /var/logs/selenium/seleniumlogfile.txt
-              sudo chmod 775 -R /var/logs
               sudo chmod 777 /var/logs/selenium/seleniumlogfile.txt
-              sudo python3 $(Pipeline.Workspace)/drop-automatedtests/$(Build.BuildId)-automatedtests/selenium/login.py 2>&1 | tee -a /var/log/selenium/seleniumlogfile.txt
+              cd $(System.DefaultWorkingDirectory)/automatedtesting/selenium
+              sudo python3 login.py 2>&1 | tee -a /var/log/selenium/seleniumlogfile.txt
 
               # ---------------Agent Log Analytics------------------
 
