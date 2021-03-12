@@ -186,7 +186,7 @@ stages:
               cd '$(System.DefaultWorkingDirectory)/automatedtesting
               cd selenium
               sudo python3 login.py | tee -a ~/logs/seleniumlogfile.txt
-
+          displayName: Run Selenium Test
               # ---------------Agent Log Analytics------------------
 
 
