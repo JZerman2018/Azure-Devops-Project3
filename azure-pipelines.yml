@@ -136,7 +136,7 @@ stages:
               sudo npm install -g newman reporter
               echo 'Starting Tests...'
               echo 'Running Regression Test'
-              newman run automatedtesting/postman/RegressionTest.postman_collection.json  --delay-request 10000 --reporters cli,junit 
+              newman run automatedtesting/postman/RegressionTest.postman_collection.json  --delay-request 15000 --reporters cli,junit 
               echo 'Running Data Validation Test'
               newman run automatedtesting/postman/DataValidation.postman_collection.json  --delay-request 10000 --reporters cli,junit
         - task: PublishTestResults@2
@@ -148,11 +148,18 @@ stages:
             testResultsFiles: '**/newman-*.xml'
     - job: SeleniumTest
       steps:
+        - task: ExtractFiles@1
+          inputs:
+            archiveFilePatterns: '$(Pipeline.Workspace)/drop-automatedtests/$(Build-BuildId)-automatedtests.zip'
+            destinationFolder: '$(Pipeline.Workspace)/automatedtests'
+            cleanDestinationFolder: true
+            overwriteExistingFiles: false
         - task: Bash@3
           inputs:
             targetType: 'inline'
             script: |
               # Write your commands here
+              #! /bin/bash
               #---------------Installing Dependencies------------------
               sudo apt-get install python3-pip -y
               sudo apt-get install unzip -y
@@ -171,12 +178,17 @@ stages:
               rm -rf chromedriver_linux.zip
               chromium-browser -version
               chromedriver --version
+              sudo mkdir -p /var/logs/selenium
+              sudo touch /var/logs/selenium/seleniumlogfile.txt
+              sudo chmod 775 -R /var/logs
+              sudo chmod 777 /var/logs/selenium/seleniumlogfile.txt
+              sudo python3 automatedtests/s/selenium/login.py 2>&1 | tee -a /var/log/selenium/seleniumlogfile.txt
 
               # ---------------Agent Log Analytics------------------
 
 
               # export PATH=$PATH:/usr/bin/chromium-browser/
-              # python3 -c "import selenium; print('Selenium Version:')"
+              
               # Install Log Analytics agent on Linux computers (only need to run once)
               # wget https://raw.githubusercontent.com/Microsoft/OMS-Agent-for-Linux/master/installer/scripts/onboard_agent.sh
               # sh onboard_agent.sh -w ${AZURE_LOG_ANALYTICS_ID} -s ${AZURE_LOG_ANALYTICS_PRIMARY_KEY}
