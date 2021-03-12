@@ -140,7 +140,7 @@ stages:
               echo 'Running Regression Test'
               newman run automatedtesting/postman/RegressionTest.postman_collection.json  --delay-request 15000 --reporters cli,junit 
               echo 'Running Data Validation Test'
-              newman run automatedtesting/postman/DataValidation.postman_collection.json  --delay-request 10000 --reporters cli,junit
+              newman run automatedtesting/postman/DataValidation.postman_collection.json  --delay-request 12000 --reporters cli,junit
         - task: PublishTestResults@2
           displayName: 'Publish Postman Newman Results **/newman-*.xml'
           condition: always()
@@ -152,10 +152,9 @@ stages:
       steps:
         - task: ExtractFiles@1
           inputs:
-            archiveFilePatterns: '$(Pipeline.Workspace)/drop-automatedtests/$(Build-BuildId)-automatedtests.zip'
+            archiveFilePatterns: '$(Pipeline.Workspace)/drop-automatedtests/$(Build.BuildId)-automatedtests.zip'
             destinationFolder: '$(Pipeline.Workspace)/automatedtests'
             cleanDestinationFolder: true
-            overwriteExistingFiles: false
         - task: Bash@3
           inputs:
             targetType: 'inline'
@@ -184,7 +183,7 @@ stages:
               sudo touch /var/logs/selenium/seleniumlogfile.txt
               sudo chmod 775 -R /var/logs
               sudo chmod 777 /var/logs/selenium/seleniumlogfile.txt
-              sudo python3 automatedtests/s/selenium/login.py 2>&1 | tee -a /var/log/selenium/seleniumlogfile.txt
+              sudo python3 $(Pipeline.Workspace)/automatedtests/selenium/login.py 2>&1 | tee -a /var/log/selenium/seleniumlogfile.txt
 
               # ---------------Agent Log Analytics------------------
 
