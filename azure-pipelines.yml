@@ -183,8 +183,7 @@ stages:
           inputs:
             targetType: 'inline'
             script: |
-              cd $(Pipeline.Workspace)/drop-automatedtests
-              unzip -o $(Build.BuildId)-automatedtests.zip
+              cd '$(System.DefaultWorkingDirectory)/automatedtesting
               cd selenium
               sudo python3 login.py | tee -a ~/logs/seleniumlogfile.txt
 
