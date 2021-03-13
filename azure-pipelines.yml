@@ -159,7 +159,6 @@ stages:
           inputs:
             targetType: 'inline'
             script: |
-              # Write your commands here
               #! /bin/bash
               #---------------Installing Dependencies------------------
               sudo apt-get install python3-pip -y
@@ -178,14 +177,38 @@ stages:
               rm -rf chromedriver_linux.zip
               chromium-browser -version
               chromedriver --version
-              #------------------Running Test----------------------
+            #--------------Archive Selenium-------------------------
+        - task: ArchiveFiles@2
+          inputs:
+            rootFolderOrFile: '$(System.DefaultWorkingDirectory)/automatedtesting/selenium'
+            includeRootFolder: false
+            archiveType: 'zip'
+            archiveFile: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId)-selenium.zip'
+            replaceExistingArchive: true
+        - task: PublishBuildArtifacts@1
+          displayName: Upload Selenium Artifact
+          inputs:
+            targetPath: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId)-selenium.zip'
+            artifactName: drop-selenium
+        - task: ExtractFiles@1
+          inputs:
+            archiveFilePatterns: '$(Pipeline.Workspace)/drop-selenium/$(Build.BuildId)-selenium.zip'
+            destinationFolder: '$(Pipeline.Workspace)/selenium'
+            cleanDestinationFolder: true
+        
+              #------------------Running Selenium Test----------------------
         - task: Bash@3
           inputs:
             targetType: 'inline'
             script: |
-              cd '$(System.DefaultWorkingDirectory)/automatedtesting
-              cd selenium
-              sudo python3 login.py | tee -a ~/logs/seleniumlogfile.txt
+              #! /bin/bash
+              sudo mkdir -p /var/logs/selenium
+              sudo chmod 664 /var/logs/selenium
+              sudo python3 $(Pipeline.Workspace)/selenium/s/login.py | tee -a ~/logs/seleniumlogfile.txt
+              cd $(System.DefaultWorkingDirectory)
+              mkdir -p logs/selenium
+              pwd
+              sudo cp /var/logs/selenium/seleniumlogfile.txt logs/selenium/seleniumlogfile.txt
           displayName: Run Selenium Test
               # ---------------Agent Log Analytics------------------
 
