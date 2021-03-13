@@ -184,10 +184,14 @@ stages:
             rm -rf chromedriver_linux.zip
             chromium-browser -version
             chromedriver --version
-            sudo mkdir -p ~/vmlogs
-            sudo chmod 777 ~/vmlogs
-            sudo python3 $(Pipeline.Workspace)/selenium-python-file/login.py 2>&1 | sudo tee -a ~/vmlogs/seleniumlogfile.txt
-            sudo touch ~/vmlogs/seleniumlogfile.txt
+            sudo mkdir -p /var/logs/seleniumlogfile.txt
+            sudo chmod 664 /var/logs/seleniumlogfile.txt
+            sudo python3 -u $(Pipeline.Workspace)/selenium-python-file/login.py 2>&1 | sudo tee -a /var/logs/seleniumlogfile.txt
+            cd $(System.DefaultWorkingDirectory)
+            mkdir -p logs/selenium
+            pwd
+            sudo cp /var/logs/selenium/seleniumlogfile.txt logs/selenium/seleniumlogfile.txt
+            ls -la
 
 
               # ---------------Agent Log Analytics------------------
