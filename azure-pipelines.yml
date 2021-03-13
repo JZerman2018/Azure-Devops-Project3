@@ -152,23 +152,26 @@ stages:
       steps:
       - publish: $(System.DefaultWorkingDirectory)/automatedtesting/selenium/login.py
         artifact: selenium-python-file
-    - deployment: DeploySeleniumOnVM
-      displayName: 'Run Selenium'
-      dependsOn: SeleniumTest
-      environment:
-        name: 'TEST'
-        resourceType: VirtualMachine
-      strategy:
-        runOnce:
-          deploy:
-            steps:
-            - download: current
-              artifact: selenium-python-file
-            - task: Bash@3
-              displayName: 'Running Selenium Test'
-              inputs:
-                targetType: 'inline'
-                script: |
+      - download: current
+        artifact: selenium-python-file
+    # - deployment: DeploySeleniumOnVM
+    #   displayName: 'Run Selenium'
+    #   dependsOn: SeleniumTest
+    #   environment:
+    #     name: 'TEST'
+    #     resourceType: VirtualMachine
+    #   strategy:
+    #     runOnce:
+    #       deploy:
+    #         steps:
+    #         - download: current
+    #           artifact: selenium-python-file
+      - task: Bash@3
+        displayName: 'Running Selenium Test'
+        inputs:
+          targetType: 'inline'
+          script: |
+                  pwd
                   sudo apt-get update -y
                   sudo apt-get install python3-pip -y
                   sudo apt-get install unzip -y
