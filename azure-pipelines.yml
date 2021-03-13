@@ -210,7 +210,9 @@ stages:
             targetType: 'inline'
             script: |
               #! /bin/bash
-              cd $(Pipeline.Workspace)/selenium/$(Build.BuildId)-selenium
+              pwd
+              ls
+              cd automatedtesting/selenium
               pwd
               ls
               sudo python3 login.py 2>&1 | tee -a /selenium/seleniumlogfile.txt
