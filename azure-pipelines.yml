@@ -223,7 +223,7 @@ stages:
             targetPath: '$(System.DefaultWorkingDirectory)/logs/selenium/seleniumlogfile.txt'
             artifact: 'drop-seleniumlog'
 
-/home/vsts/work/1/a/168-selenium.zip login.py seleniumlogfile.txt
+#/home/vsts/work/1/a/168-selenium.zip login.py seleniumlogfile.txt
 
 
               # ---------------Agent Log Analytics------------------
