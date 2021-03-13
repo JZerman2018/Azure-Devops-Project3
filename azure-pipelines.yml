@@ -171,22 +171,23 @@ stages:
         inputs:
           targetType: 'inline'
           script: |
-                  pwd
-                  sudo apt-get update -y
-                  sudo apt-get install python3-pip -y
-                  sudo apt-get install unzip -y
-                  sudo apt-get install -y chromium-browser
-                  sudo apt-get install -y chromium-chromedriver
-                  sudo pip3 install -U selenium
-                  wget https://chromedriver.storage.googleapis.com/89.0.4389.23/chromedriver_linux64.zip
-                  unzip chromedriver_linux64.zip
-                  # sudo chmod a+x chromedriver
-                  rm -rf chromedriver_linux.zip
-                  chromium-browser -version
-                  chromedriver --version
-                  sudo mkdir -p ~/vmlogs
-                  sudo unbuffer python3 $(Pipeline.Workspace)/selenium-python-file/login.py 2>&1 | tee -a ~/vmlogs/seleniumlogfile.txt
-
+            pwd
+            sudo apt-get update -y
+            sudo apt-get install python3-pip -y
+            sudo apt-get install unzip -y
+            sudo apt-get install -y chromium-browser
+            sudo apt-get install -y chromium-chromedriver
+            sudo pip3 install -U selenium
+            wget https://chromedriver.storage.googleapis.com/89.0.4389.23/chromedriver_linux64.zip
+            unzip chromedriver_linux64.zip
+            sudo chmod a+x /etc/profile.d/env_vars.sh
+            rm -rf chromedriver_linux.zip
+            chromium-browser -version
+            chromedriver --version
+            sudo mkdir -p ~/vmlogs
+            sudo chmod 777 ~/vmlogs
+            sudo python3 $(Pipeline.Workspace)/selenium-python-file/login.py 2>&1 | sudo tee -a ~/vmlogs/seleniumlogfile.txt
+            sudo touch ~/vmlogs/seleniumlogfile.txt
 
 
               # ---------------Agent Log Analytics------------------
