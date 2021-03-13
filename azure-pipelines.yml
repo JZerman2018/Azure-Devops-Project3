@@ -160,14 +160,15 @@ stages:
             targetType: 'inline'
             script: |
               #! /bin/bash
+
               #---------------Installing Dependencies------------------
               sudo apt-get install python3-pip -y
               sudo apt-get install unzip -y
               sudo apt-get install -y chromium-browser
               sudo apt-get install -y chromium-chromdriver
               python3 -m pip install --upgrade pip
-              pip3 install selenium
-              python3 import selenium
+              pip3 install -U selenium
+            
               #-------------Installing Chromedriver--------------------
               sudo chmod 755 /usr/bin/chromedriver
               wget https://chromedriver.storage.googleapis.com/89.0.4389.23/chromedriver_linux64.zip
@@ -200,11 +201,7 @@ stages:
               #------------------Running Selenium Test----------------------
         - task: DownloadPipelineArtifact@2
           inputs:
-            buildType: 'specific'
-            project: '6e17f424-c69e-4292-9259-556cef4775da'
-            definition: '9'
-            specificBuildWithTriggering: true
-            buildVersionToDownload: 'latest'
+            buildType: 'current'
             artifactName: 'drop-selenium'
             targetPath: '$(Pipeline.Workspace)/selenium'
         - task: Bash@3
