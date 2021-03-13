@@ -210,16 +210,11 @@ stages:
             targetType: 'inline'
             script: |
               #! /bin/bash
-              cd $(Pipeline.Workspace)/selenium
+              cd $(Pipeline.Workspace)/selenium/$(Build.BuildId)-selenium
               pwd
-              ls -la
-              # sudo mkdir -p /var/logs/selenium
-              # sudo chmod 664 /var/logs/selenium
+              ls
               sudo python3 login.py 2>&1 | tee -a /selenium/seleniumlogfile.txt
-              #cd $(System.DefaultWorkingDirectory)
-              # mkdir -p logs/selenium
               pwd
-              # sudo cp /selenium/seleniumlogfile.txt selenium/seleniumlogfile.txt
               ls -la
         - task: PublishPipelineArtifact@1
           displayName: Publish Selenium Log
