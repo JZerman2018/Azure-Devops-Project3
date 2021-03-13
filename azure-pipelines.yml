@@ -190,7 +190,7 @@ stages:
             cd $(System.DefaultWorkingDirectory)
             mkdir -p logs/selenium
             pwd
-            sudo cp /var/logs/selenium/seleniumlogfile.txt logs/selenium/seleniumlogfile.txt
+            cat seleniumlog.txt
             ls -la
 
 
