@@ -167,7 +167,7 @@ stages:
               sudo apt-get install -y chromium-chromdriver
               python3 -m pip install --upgrade pip
               pip3 install selenium
-              python3 import selenium, webdriver
+              python3 import selenium
               #-------------Installing Chromedriver--------------------
               sudo chmod 755 /usr/bin/chromedriver
               wget https://chromedriver.storage.googleapis.com/89.0.4389.23/chromedriver_linux64.zip
@@ -198,15 +198,22 @@ stages:
         #     cleanDestinationFolder: true
         
               #------------------Running Selenium Test----------------------
+        - task: DownloadPipelineArtifact@2
+          inputs:
+            buildType: 'specific'
+            project: '6e17f424-c69e-4292-9259-556cef4775da'
+            definition: '9'
+            specificBuildWithTriggering: true
+            buildVersionToDownload: 'latest'
+            artifactName: 'drop-selenium'
+            targetPath: '$(Pipeline.Workspace)/selenium'
         - task: Bash@3
           displayName: Run Selenium Test
           inputs:
             targetType: 'inline'
             script: |
               #! /bin/bash
-              cd $(Pipeline.Workspace)/drop-selenium
-              find . -type f ! -name '**/$(Build.BuildId)-selenium.zip'
-              unzip -o **/$(Build.BuildId).selenium.zip
+              cd $(Pipeline.Workspace)/selenium
               pwd
               ls -la
               # sudo mkdir -p /var/logs/selenium
@@ -220,7 +227,7 @@ stages:
         - task: PublishPipelineArtifact@1
           displayName: Publish Selenium Log
           inputs:
-            targetPath: '$(System.DefaultWorkingDirectory)/logs/selenium/seleniumlogfile.txt'
+            targetPath: '$(System.DefaultWorkingDirectory)/automatedtesting/selenium/seleniumlogfile.txt'
             artifact: 'drop-seleniumlog'
 
 #/home/vsts/work/1/a/168-selenium.zip login.py seleniumlogfile.txt
