@@ -205,8 +205,8 @@ stages:
             script: |
               #! /bin/bash
               cd $(Pipeline.Workspace)/drop-selenium
-              find . -type f ! -name '$(Build.BuildId)-selenium.zip'
-              unzip -o $(Build.BuildId).selenium.zip
+              find . -type f ! -name '**/$(Build.BuildId)-selenium.zip'
+              unzip -o **/$(Build.BuildId).selenium.zip
               pwd
               ls -la
               # sudo mkdir -p /var/logs/selenium
