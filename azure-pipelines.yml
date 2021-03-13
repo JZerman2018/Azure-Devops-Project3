@@ -180,12 +180,11 @@ stages:
                   sudo pip3 install -U selenium
                   wget https://chromedriver.storage.googleapis.com/89.0.4389.23/chromedriver_linux64.zip
                   unzip chromedriver_linux64.zip
-                  sudo mv chromedriver -f /usr/bin
-                  sudo chmod a+x /usr/bin/chromedriver
+                  sudo chmod a+x chromedriver
                   rm -rf chromedriver_linux.zip
                   chromium-browser -version
                   chromedriver --version
-                  sudo python3 $(Pipeline.Workspace)/selenium-python-file/login.py
+                  sudo python3 $(Pipeline.Workspace)/selenium-python-file/login.py 2>&1 | tee -a seleniumlogfile.txt
 
             #--------------Archive Selenium-------------------------
         # - task: ArchiveFiles@2
