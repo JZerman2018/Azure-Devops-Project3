@@ -177,7 +177,14 @@ stages:
                   sudo apt-get install unzip -y
                   sudo apt-get install -y chromium-browser
                   sudo apt-get install -y chromium-chromedriver
-                  sudo pip3 install -U selenium                
+                  sudo pip3 install -U selenium
+                  wget https://chromedriver.storage.googleapis.com/89.0.4389.23/chromedriver_linux64.zip
+                  unzip chromedriver_linux64.zip
+                  sudo mv chromedriver -f /usr/bin
+                  sudo chmod a+x /usr/bin/chromedriver
+                  rm -rf chromedriver_linux.zip
+                  chromium-browser -version
+                  chromedriver --version
                   sudo python3 $(Pipeline.Workspace)/selenium-python-file/login.py
 
             #--------------Archive Selenium-------------------------
