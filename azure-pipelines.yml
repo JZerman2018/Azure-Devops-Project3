@@ -189,12 +189,12 @@ stages:
               pip3 install -U selenium
             
               #-------------Installing Chromedriver--------------------
-              sudo chmod 755 /usr/bin/chromedriver
+              #sudo chmod 755 /usr/bin/chromedriver
               wget https://chromedriver.storage.googleapis.com/89.0.4389.23/chromedriver_linux64.zip
               unzip chromedriver_linux64.zip
-              sudo mv chromedriver -f /usr/bin
-              cd /usr/bin
-              sudo chmod a+x /usr/bin/chromedriver
+              # sudo mv chromedriver -f /usr/bin
+              # cd /usr/bin
+              # sudo chmod a+x /usr/bin/chromedriver
               rm -rf chromedriver_linux.zip
               chromium-browser -version
               chromedriver --version
