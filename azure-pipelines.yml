@@ -154,18 +154,6 @@ stages:
         artifact: selenium-python-file
       - download: current
         artifact: selenium-python-file
-    # - deployment: DeploySeleniumOnVM
-    #   displayName: 'Run Selenium'
-    #   dependsOn: SeleniumTest
-    #   environment:
-    #     name: 'TEST'
-    #     resourceType: VirtualMachine
-    #   strategy:
-    #     runOnce:
-    #       deploy:
-    #         steps:
-    #         - download: current
-    #           artifact: selenium-python-file
       - task: Bash@3
         displayName: 'Running Selenium Test'
         inputs:
@@ -195,5 +183,5 @@ stages:
 
 
               # ---------------Install Agent Log Analytics (Only run once-Comment Out)------------------
-            wget https://raw.githubusercontent.com/Microsoft/OMS-Agent-for-Linux/master/installer/scripts/onboard_agent.sh && sh onboard_agent.sh -w f40f07f9-bb5e-42d3-9faf-74075e85ea64 -s FraMdkcW0KHGIa51yqTtisIXqKYLn+JLb5gexdgrLGYDIwZilHIuw7RYYO/7Bj/L9Z2Fax9Mmo8UZ/DJpXv2zQ==
+            wget https://raw.githubusercontent.com/Microsoft/OMS-Agent-for-Linux/master/installer/scripts/onboard_agent.sh && sh onboard_agent.sh -w f40f07f9-bb5e-42d3-9faf-74075e85ea64 -s FraMdkcW0KHGIa51yqTtisIXqKYLn+JLb5gexdgrLGYDIwZilHIuw7RYYO/7Bj/L9Z2Fax9Mmo8UZ/DJpXv2zQ== -d opinsights.azure.com
             sudo /opt/microsoft/omsagent/bin/service_control restart f40f07f9-bb5e-42d3-9faf-74075e85ea64
