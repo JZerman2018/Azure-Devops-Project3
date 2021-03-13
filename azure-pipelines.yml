@@ -177,9 +177,8 @@ stages:
                   sudo apt-get install unzip -y
                   sudo apt-get install -y chromium-browser
                   sudo apt-get install -y chromium-chromedriver
-                  pip3 install selenium                
-                  sudo python3 $(Pipeline.Workspace)/selenium-python-file/login.py 2>&1 | tee -a /seleniumlogfile.txt
-                  sudo touch /selenium/seleniumlogfile.txt
+                  pip3 install -U selenium                
+                  sudo python3 $(Pipeline.Workspace)/selenium-python-file/login.py
 
             #--------------Archive Selenium-------------------------
         # - task: ArchiveFiles@2
