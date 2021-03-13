@@ -150,68 +150,94 @@ stages:
             testResultsFiles: '**/newman-*.xml'
     - job: SeleniumTest
       steps:
-            
+      - publish: $(System.DefaultWorkingDirectory)/automatedtesting/selenium/login.py
+        artifact: selenium-python-file
+    - deployment: DeploySeleniumOnVM
+      displayName: 'Run Selenium'
+      dependsOn: SeleniumTest
+      environment:
+        resourceType: VirtualMachine
+      strategy:
+        runOnce:
+          deploy:
+            steps:
+            - download: current
+              artifact: selenium-python-file
+            - task: Bash@3
+              displayName: 'Running Selenium Test'
+              inputs:
+                targetType: 'inline'
+                script: |
+                  sudo apt-get update -y
+                  sudo apt-get install python3-pip -y
+                  sudo apt-get install unzip -y
+                  sudo apt-get install -y chromium-browser
+                  sudo apt-get install -y chromium-chromedriver
+                  pip3 install selenium                
+                  sudo python3 $(Pipeline.Workspace)/selenium-python-file/login.py 2>&1 | tee -a /selenium/seleniumlogfile.txt
+                  sudo touch /selenium/seleniumlogfile.txt
+
             #--------------Archive Selenium-------------------------
-        - task: ArchiveFiles@2
-          inputs:
-            rootFolderOrFile: '$(System.DefaultWorkingDirectory)/automatedtesting/selenium'
-            includeRootFolder: false
-            archiveType: 'zip'
-            archiveFile: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId)-selenium.zip'
-            replaceExistingArchive: true
-        - task: PublishBuildArtifacts@1
-          displayName: Upload Selenium Artifact
-          inputs:
-            targetPath: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId)-selenium.zip'
-            artifactName: drop-selenium
+        # - task: ArchiveFiles@2
+        #   inputs:
+        #     rootFolderOrFile: '$(System.DefaultWorkingDirectory)/automatedtesting/selenium'
+        #     includeRootFolder: false
+        #     archiveType: 'zip'
+        #     archiveFile: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId)-selenium.zip'
+        #     replaceExistingArchive: true
+        # - task: PublishBuildArtifacts@1
+        #   displayName: Upload Selenium Artifact
+        #   inputs:
+        #     targetPath: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId)-selenium.zip'
+        #     artifactName: drop-selenium
               
               #------------------Selenium Test----------------------
-        - task: DownloadPipelineArtifact@2
-          inputs:
-            buildType: 'current'
-            artifactName: 'drop-selenium'
-            targetPath: '$(Pipeline.Workspace)/selenium'
-        - task: Bash@3
-          displayName: Run Selenium Test
-          inputs:
-            targetType: 'inline'
-            script: |
+        # - task: DownloadPipelineArtifact@2
+        #   inputs:
+        #     buildType: 'current'
+        #     artifactName: 'drop-selenium'
+        #     targetPath: '$(Pipeline.Workspace)/selenium'
+        # - task: Bash@3
+        #   displayName: Run Selenium Test
+        #   inputs:
+        #     targetType: 'inline'
+        #     script: |
               #! /bin/bash
 
               #---------------Installing Dependencies------------------
               
-              pwd
-              sudo apt-get install python3-pip -y
-              sudo apt-get install unzip -y
-              sudo apt-get install -y chromium-browser
-              sudo apt-get install -y chromium-chromdriver
-              python3 -m pip install --upgrade pip
-              pip3 install -U selenium
+              # pwd
+              # sudo apt-get install python3-pip -y
+              # sudo apt-get install unzip -y
+              # sudo apt-get install -y chromium-browser
+              # sudo apt-get install -y chromium-chromdriver
+              # python3 -m pip install --upgrade pip
+              # pip3 install -U selenium
             
               #-------------Installing Chromedriver--------------------
               #sudo chmod 755 /usr/bin/chromedriver
-              wget https://chromedriver.storage.googleapis.com/89.0.4389.23/chromedriver_linux64.zip
-              unzip chromedriver_linux64.zip
+              # wget https://chromedriver.storage.googleapis.com/89.0.4389.23/chromedriver_linux64.zip
+              # unzip chromedriver_linux64.zip
               # sudo mv chromedriver -f /usr/bin
               # cd /usr/bin
               # sudo chmod a+x /usr/bin/chromedriver
-              rm -rf chromedriver_linux.zip
-              chromium-browser -version
-              chromedriver --version
+              # rm -rf chromedriver_linux.zip
+              # chromium-browser -version
+              # chromedriver --version
               #---------------Running Selenium Test----------------------
-              pwd
-              ls
-              cd automatedtesting/selenium
-              pwd
-              ls
-              sudo python3 login.py 2>&1 | tee -a /selenium/seleniumlogfile.txt
-              pwd
-              ls -la
-        - task: PublishPipelineArtifact@1
-          displayName: Publish Selenium Log
-          inputs:
-            targetPath: '$(System.DefaultWorkingDirectory)/automatedtesting/selenium/seleniumlogfile.txt'
-            artifact: 'drop-seleniumlog'
+        #       pwd
+        #       ls
+        #       cd automatedtesting/selenium
+        #       pwd
+        #       ls
+        #       sudo python3 login.py 2>&1 | tee -a /selenium/seleniumlogfile.txt
+        #       pwd
+        #       ls -la
+        # - task: PublishPipelineArtifact@1
+        #   displayName: Publish Selenium Log
+        #   inputs:
+        #     targetPath: '$(System.DefaultWorkingDirectory)/automatedtesting/selenium/seleniumlogfile.txt'
+        #     artifact: 'drop-seleniumlog'
 
 
 
