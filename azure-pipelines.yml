@@ -204,7 +204,7 @@ stages:
             targetType: 'inline'
             script: |
               #! /bin/bash
-              cd (Pipeline.Workspace)/drop-selenium
+              cd $(Pipeline.Workspace)/drop-selenium
               find . -type f ! -name '$(Build.BuildId)-selenium.zip'
               unzip -o $(Build.BuildId).selenium.zip
               pwd
