@@ -204,21 +204,26 @@ stages:
             targetType: 'inline'
             script: |
               #! /bin/bash
-              cd ./automatedtesting/selenium
+              cd (Pipeline.Workspace)/drop-selenium
+              find . -type f ! -name '$(Build.BuildId)-selenium.zip'
+              unzip -o $(Build.BuildId).selenium.zip
               pwd
-              sudo mkdir -p /var/logs/selenium
-              sudo chmod 664 /var/logs/selenium
-              sudo python3 login.py 2>&1 | tee -a /var/logs/selenium/seleniumlogfile.txt
-              cd $(System.DefaultWorkingDirectory)
-              mkdir -p logs/selenium
+              ls -la
+              # sudo mkdir -p /var/logs/selenium
+              # sudo chmod 664 /var/logs/selenium
+              sudo python3 login.py 2>&1 | tee -a /selenium/seleniumlogfile.txt
+              #cd $(System.DefaultWorkingDirectory)
+              # mkdir -p logs/selenium
               pwd
-              sudo cp /var/logs/selenium/seleniumlogfile.txt logs/selenium/seleniumlogfile.txt
+              # sudo cp /selenium/seleniumlogfile.txt selenium/seleniumlogfile.txt
               ls -la
         - task: PublishPipelineArtifact@1
           displayName: Publish Selenium Log
           inputs:
             targetPath: '$(System.DefaultWorkingDirectory)/logs/selenium/seleniumlogfile.txt'
             artifact: 'drop-seleniumlog'
+
+/home/vsts/work/1/a/168-selenium.zip login.py seleniumlogfile.txt
 
 
               # ---------------Agent Log Analytics------------------
