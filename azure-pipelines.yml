@@ -156,6 +156,7 @@ stages:
       displayName: 'Run Selenium'
       dependsOn: SeleniumTest
       environment:
+        name: 'TEST'
         resourceType: VirtualMachine
       strategy:
         runOnce:
