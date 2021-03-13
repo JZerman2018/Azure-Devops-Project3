@@ -150,18 +150,37 @@ stages:
             testResultsFiles: '**/newman-*.xml'
     - job: SeleniumTest
       steps:
-        # - task: ExtractFiles@1
-        #   inputs:
-        #     archiveFilePatterns: '$(Pipeline.Workspace)/drop-automatedtests/$(Build.BuildId)-automatedtests.zip'
-        #     destinationFolder: '$(Pipeline.Workspace)/automatedtests'
-        #     cleanDestinationFolder: true
+            
+            #--------------Archive Selenium-------------------------
+        - task: ArchiveFiles@2
+          inputs:
+            rootFolderOrFile: '$(System.DefaultWorkingDirectory)/automatedtesting/selenium'
+            includeRootFolder: false
+            archiveType: 'zip'
+            archiveFile: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId)-selenium.zip'
+            replaceExistingArchive: true
+        - task: PublishBuildArtifacts@1
+          displayName: Upload Selenium Artifact
+          inputs:
+            targetPath: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId)-selenium.zip'
+            artifactName: drop-selenium
+              
+              #------------------Selenium Test----------------------
+        - task: DownloadPipelineArtifact@2
+          inputs:
+            buildType: 'current'
+            artifactName: 'drop-selenium'
+            targetPath: '$(Pipeline.Workspace)/selenium'
         - task: Bash@3
+          displayName: Run Selenium Test
           inputs:
             targetType: 'inline'
             script: |
               #! /bin/bash
 
               #---------------Installing Dependencies------------------
+              
+              pwd
               sudo apt-get install python3-pip -y
               sudo apt-get install unzip -y
               sudo apt-get install -y chromium-browser
@@ -179,37 +198,7 @@ stages:
               rm -rf chromedriver_linux.zip
               chromium-browser -version
               chromedriver --version
-            #--------------Archive Selenium-------------------------
-        - task: ArchiveFiles@2
-          inputs:
-            rootFolderOrFile: '$(System.DefaultWorkingDirectory)/automatedtesting/selenium'
-            includeRootFolder: false
-            archiveType: 'zip'
-            archiveFile: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId)-selenium.zip'
-            replaceExistingArchive: true
-        - task: PublishBuildArtifacts@1
-          displayName: Upload Selenium Artifact
-          inputs:
-            targetPath: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId)-selenium.zip'
-            artifactName: drop-selenium
-        # - task: ExtractFiles@1
-        #   inputs:
-        #     archiveFilePatterns: '$(Pipeline.Workspace)/drop-selenium/$(Build.BuildId)-selenium.zip'
-        #     destinationFolder: '$(Pipeline.Workspace)/selenium'
-        #     cleanDestinationFolder: true
-        
-              #------------------Running Selenium Test----------------------
-        - task: DownloadPipelineArtifact@2
-          inputs:
-            buildType: 'current'
-            artifactName: 'drop-selenium'
-            targetPath: '$(Pipeline.Workspace)/selenium'
-        - task: Bash@3
-          displayName: Run Selenium Test
-          inputs:
-            targetType: 'inline'
-            script: |
-              #! /bin/bash
+              #---------------Running Selenium Test----------------------
               pwd
               ls
               cd automatedtesting/selenium
@@ -224,7 +213,7 @@ stages:
             targetPath: '$(System.DefaultWorkingDirectory)/automatedtesting/selenium/seleniumlogfile.txt'
             artifact: 'drop-seleniumlog'
 
-#/home/vsts/work/1/a/168-selenium.zip login.py seleniumlogfile.txt
+
 
 
               # ---------------Agent Log Analytics------------------
