@@ -203,9 +203,7 @@ stages:
             targetType: 'inline'
             script: |
               #! /bin/bash
-              cd $(Pipeline.Workspace)/drop-selenium
-              find . -type f ! -name '$(Build.BuildId)-selenium.zip'
-              unzip -o $(Build.BuildId)-selenium.zip
+              cd ./automatedtesting/selenium
               pwd
               sudo mkdir -p /var/logs/selenium
               sudo chmod 664 /var/logs/selenium
