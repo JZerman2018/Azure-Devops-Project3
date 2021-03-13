@@ -190,26 +190,38 @@ stages:
           inputs:
             targetPath: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId)-selenium.zip'
             artifactName: drop-selenium
-        - task: ExtractFiles@1
-          inputs:
-            archiveFilePatterns: '$(Pipeline.Workspace)/drop-selenium/$(Build.BuildId)-selenium.zip'
-            destinationFolder: '$(Pipeline.Workspace)/selenium'
-            cleanDestinationFolder: true
+        # - task: ExtractFiles@1
+        #   inputs:
+        #     archiveFilePatterns: '$(Pipeline.Workspace)/drop-selenium/$(Build.BuildId)-selenium.zip'
+        #     destinationFolder: '$(Pipeline.Workspace)/selenium'
+        #     cleanDestinationFolder: true
         
               #------------------Running Selenium Test----------------------
         - task: Bash@3
+          displayName: Run Selenium Test
           inputs:
             targetType: 'inline'
             script: |
               #! /bin/bash
+              cd $(Pipeline.Workspace)/drop-selenium
+              find . -type f ! -name '$(Build.BuildId)-selenium.zip'
+              unzip -o $(Build.BuildId)-selenium.zip
+              pwd
               sudo mkdir -p /var/logs/selenium
               sudo chmod 664 /var/logs/selenium
-              sudo python3 $(Pipeline.Workspace)/selenium/s/login.py | tee -a ~/logs/seleniumlogfile.txt
+              sudo python3 login.py 2>&1 | tee -a /var/logs/selenium/seleniumlogfile.txt
               cd $(System.DefaultWorkingDirectory)
               mkdir -p logs/selenium
               pwd
               sudo cp /var/logs/selenium/seleniumlogfile.txt logs/selenium/seleniumlogfile.txt
-          displayName: Run Selenium Test
+              ls -la
+        - task: PublishPipelineArtifact@1
+          displayName: Publish Selenium Log
+          inputs:
+            targetPath: '$(System.DefaultWorkingDirectory)/logs/selenium/seleniumlogfile.txt'
+            artifact: 'drop-seleniumlog'
+
+
               # ---------------Agent Log Analytics------------------
 
 
