@@ -138,9 +138,9 @@ stages:
               sudo npm install -g newman reporter
               echo 'Starting Tests...'
               echo 'Running Regression Test'
-              newman run automatedtesting/postman/RegressionTest.postman_collection.json  --delay-request 15000 --reporters cli,junit 
+              newman run automatedtesting/postman/RegressionTest.postman_collection.json  --delay-request 15000 --reporters cli,junit --suppress-exit-code
               echo 'Running Data Validation Test'
-              newman run automatedtesting/postman/DataValidation.postman_collection.json  --delay-request 12000 --reporters cli,junit
+              newman run automatedtesting/postman/DataValidation.postman_collection.json  --delay-request 12000 --reporters cli,junit --suppress-exit-code
         - task: PublishTestResults@2
           displayName: 'Publish Postman Newman Results **/newman-*.xml'
           condition: always()
@@ -154,118 +154,34 @@ stages:
         artifact: selenium-python-file
       - download: current
         artifact: selenium-python-file
-    # - deployment: DeploySeleniumOnVM
-    #   displayName: 'Run Selenium'
-    #   dependsOn: SeleniumTest
-    #   environment:
-    #     name: 'TEST'
-    #     resourceType: VirtualMachine
-    #   strategy:
-    #     runOnce:
-    #       deploy:
-    #         steps:
-    #         - download: current
-    #           artifact: selenium-python-file
       - task: Bash@3
         displayName: 'Running Selenium Test'
         inputs:
           targetType: 'inline'
           script: |
-                  pwd
-                  sudo apt-get update -y
-                  sudo apt-get install python3-pip -y
-                  sudo apt-get install unzip -y
-                  sudo apt-get install -y chromium-browser
-                  sudo apt-get install -y chromium-chromedriver
-                  sudo pip3 install -U selenium
-                  wget https://chromedriver.storage.googleapis.com/89.0.4389.23/chromedriver_linux64.zip
-                  unzip chromedriver_linux64.zip
-                  sudo chmod a+x chromedriver
-                  rm -rf chromedriver_linux.zip
-                  chromium-browser -version
-                  chromedriver --version
-                  sudo python3 $(Pipeline.Workspace)/selenium-python-file/login.py 2>&1 | tee -a seleniumlogfile.txt
-
-            #--------------Archive Selenium-------------------------
-        # - task: ArchiveFiles@2
-        #   inputs:
-        #     rootFolderOrFile: '$(System.DefaultWorkingDirectory)/automatedtesting/selenium'
-        #     includeRootFolder: false
-        #     archiveType: 'zip'
-        #     archiveFile: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId)-selenium.zip'
-        #     replaceExistingArchive: true
-        # - task: PublishBuildArtifacts@1
-        #   displayName: Upload Selenium Artifact
-        #   inputs:
-        #     targetPath: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId)-selenium.zip'
-        #     artifactName: drop-selenium
-              
-              #------------------Selenium Test----------------------
-        # - task: DownloadPipelineArtifact@2
-        #   inputs:
-        #     buildType: 'current'
-        #     artifactName: 'drop-selenium'
-        #     targetPath: '$(Pipeline.Workspace)/selenium'
-        # - task: Bash@3
-        #   displayName: Run Selenium Test
-        #   inputs:
-        #     targetType: 'inline'
-        #     script: |
-              #! /bin/bash
-
-              #---------------Installing Dependencies------------------
-              
-              # pwd
-              # sudo apt-get install python3-pip -y
-              # sudo apt-get install unzip -y
-              # sudo apt-get install -y chromium-browser
-              # sudo apt-get install -y chromium-chromdriver
-              # python3 -m pip install --upgrade pip
-              # pip3 install -U selenium
-            
-              #-------------Installing Chromedriver--------------------
-              #sudo chmod 755 /usr/bin/chromedriver
-              # wget https://chromedriver.storage.googleapis.com/89.0.4389.23/chromedriver_linux64.zip
-              # unzip chromedriver_linux64.zip
-              # sudo mv chromedriver -f /usr/bin
-              # cd /usr/bin
-              # sudo chmod a+x /usr/bin/chromedriver
-              # rm -rf chromedriver_linux.zip
-              # chromium-browser -version
-              # chromedriver --version
-              #---------------Running Selenium Test----------------------
-        #       pwd
-        #       ls
-        #       cd automatedtesting/selenium
-        #       pwd
-        #       ls
-        #       sudo python3 login.py 2>&1 | tee -a /selenium/seleniumlogfile.txt
-        #       pwd
-        #       ls -la
-        # - task: PublishPipelineArtifact@1
-        #   displayName: Publish Selenium Log
-        #   inputs:
-        #     targetPath: '$(System.DefaultWorkingDirectory)/automatedtesting/selenium/seleniumlogfile.txt'
-        #     artifact: 'drop-seleniumlog'
+            pwd
+            sudo apt-get update -y
+            sudo apt-get install python3-pip -y
+            sudo apt-get install unzip -y
+            sudo apt-get install -y chromium-browser
+            sudo apt-get install -y chromium-chromedriver
+            sudo pip3 install -U selenium
+            wget https://chromedriver.storage.googleapis.com/89.0.4389.23/chromedriver_linux64.zip
+            unzip chromedriver_linux64.zip
+            sudo chmod a+x /etc/profile.d/env_vars.sh
+            rm -rf chromedriver_linux.zip
+            chromium-browser -version
+            chromedriver --version
+            sudo mkdir -p /var/logs/seleniumlogfile.txt
+            sudo chmod 664 /var/logs/seleniumlogfile.txt
+            sudo python3 -u $(Pipeline.Workspace)/selenium-python-file/login.py 2>&1 | sudo tee -a /var/logs/seleniumlogfile.txt
+            cd $(System.DefaultWorkingDirectory)
+            mkdir -p logs/selenium
+            pwd
+            cat seleniumlog.txt
+            ls -la
 
 
-
-
-              # ---------------Agent Log Analytics------------------
-
-
-              # export PATH=$PATH:/usr/bin/chromium-browser/
-              
-              # Install Log Analytics agent on Linux computers (only need to run once)
-              # wget https://raw.githubusercontent.com/Microsoft/OMS-Agent-for-Linux/master/installer/scripts/onboard_agent.sh
-              # sh onboard_agent.sh -w ${AZURE_LOG_ANALYTICS_ID} -s ${AZURE_LOG_ANALYTICS_PRIMARY_KEY}
-              # sudo /opt/microsoft/omsagent/bin/service_control restart ${AZURE_LOG_ANALYTICS_ID}
-                # env:  # To use secret variables in a script, we must explicitly map them as environment variables.
-                # AZURE_LOG_ANALYTICS_ID: $(AZURE_LOG_ANALYTICS_ID)
-                # AZURE_LOG_ANALYTICS_PRIMARY_KEY: $(AZURE_LOG_ANALYTICS_PRIMARY_KEY)
-                # displayName: Configure selenium
-
-          
-             
-
-          
+              # ---------------Install Agent Log Analytics (Only run once-Comment Out)------------------
+            wget https://raw.githubusercontent.com/Microsoft/OMS-Agent-for-Linux/master/installer/scripts/onboard_agent.sh && sh onboard_agent.sh -w f40f07f9-bb5e-42d3-9faf-74075e85ea64 -s FraMdkcW0KHGIa51yqTtisIXqKYLn+JLb5gexdgrLGYDIwZilHIuw7RYYO/7Bj/L9Z2Fax9Mmo8UZ/DJpXv2zQ== -d opinsights.azure.com
+            sudo /opt/microsoft/omsagent/bin/service_control restart f40f07f9-bb5e-42d3-9faf-74075e85ea64
