@@ -183,5 +183,42 @@ stages:
 
 
               # ---------------Install Agent Log Analytics (Only run once-Comment Out)------------------
-            wget https://raw.githubusercontent.com/Microsoft/OMS-Agent-for-Linux/master/installer/scripts/onboard_agent.sh && sh onboard_agent.sh -w f40f07f9-bb5e-42d3-9faf-74075e85ea64 -s FraMdkcW0KHGIa51yqTtisIXqKYLn+JLb5gexdgrLGYDIwZilHIuw7RYYO/7Bj/L9Z2Fax9Mmo8UZ/DJpXv2zQ== -d opinsights.azure.com
-            sudo /opt/microsoft/omsagent/bin/service_control restart f40f07f9-bb5e-42d3-9faf-74075e85ea64
+            #wget https://raw.githubusercontent.com/Microsoft/OMS-Agent-for-Linux/master/installer/scripts/onboard_agent.sh && sh onboard_agent.sh -w f40f07f9-bb5e-42d3-9faf-74075e85ea64 -s FraMdkcW0KHGIa51yqTtisIXqKYLn+JLb5gexdgrLGYDIwZilHIuw7RYYO/7Bj/L9Z2Fax9Mmo8UZ/DJpXv2zQ== -d opinsights.azure.com
+            #sudo /opt/microsoft/omsagent/bin/service_control restart f40f07f9-bb5e-42d3-9faf-74075e85ea64
+    - job: JMeterTest
+      displayName: Test JMeter
+      steps:
+      - task: Bash@3
+        displayName: Install JMeter
+        inputs:
+          targetType: 'inline'
+          script: |
+            sudo apt-get install openjdk-11-jre-headless -y
+            java -version
+            wget https://archive.apache.org/dist/jmeter/binaries/apache-jmeter-5.4.tgz -O jmeter.tgz
+            tar xzvf jmeter.tgz
+            apache-jmeter-5.4/bin/jmeter --version
+            mkdir -p log/jmeter
+            pwd
+            ls -la
+      - task: Bash@3
+        displayName: JMeter Stress Test
+        inputs:
+          targetType: 'inline'
+          script: |
+            apache-jmeter-5.4/bin/jmeter -n -t automatedtesting/jmeter/stresstest.jmx \
+            -l log/jmeter/StressTest_Results.csv -e -f -o log/jmeter/stresstest-html-report \
+            -j log/jmeter/jmeter-stresstest.log
+      - task: Bash@3
+        displayName: JMeter Endurance Test
+        inputs:
+          targetType: 'inline'
+          script: |
+            apache-jmeter-5.4/bin/jmeter -n -t automatedtesting/jmeter/endurancetest.jmx \
+            -l log/jmeter/EnduranceTest_Results.csv -e -f -o log/jmeter/endurancetest-html-report \
+            -j log/jmeter/jmeter-endurancetest.log
+      - task: PublishPipelineArtifact@1
+        inputs:
+          targetPath: '$(Pipeline.Workspace)/automatedtesting/jmeter'
+          artifact: 'jmeter-reports'
+          publishLocation: 'pipeline'
