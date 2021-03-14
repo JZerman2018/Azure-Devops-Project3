@@ -195,7 +195,7 @@ stages:
           script: |
             sudo apt-get install openjdk-11-jre-headless -y
             java -version
-            wget https://archive.apache.org/dist/jmeter/binaries/apache-jmeter-5.4.tgz -O jmeter.tgz
+            wget https://archive.apache.org/dist/jmeter/binaries/apache-jmeter-5.2.1.tgz -O jmeter.tgz
             tar xzvf jmeter.tgz
             apache-jmeter-5.4/bin/jmeter --version
             mkdir -p log/jmeter
@@ -206,7 +206,7 @@ stages:
         inputs:
           targetType: 'inline'
           script: |
-            apache-jmeter-5.4/bin/jmeter -n -t automatedtesting/jmeter/stresstest.jmx \
+            apache-jmeter-5.2.1/bin/jmeter -n -t automatedtesting/jmeter/stresstest.jmx \
             -l log/jmeter/StressTest_Results.csv -e -f -o log/jmeter/stresstest-html-report \
             -j log/jmeter/jmeter-stresstest.log
       - task: Bash@3
@@ -214,7 +214,7 @@ stages:
         inputs:
           targetType: 'inline'
           script: |
-            apache-jmeter-5.4/bin/jmeter -n -t automatedtesting/jmeter/endurancetest.jmx \
+            apache-jmeter-5.2.1/bin/jmeter -n -t automatedtesting/jmeter/endurancetest.jmx \
             -l log/jmeter/EnduranceTest_Results.csv -e -f -o log/jmeter/endurancetest-html-report \
             -j log/jmeter/jmeter-endurancetest.log
       - task: PublishPipelineArtifact@1
