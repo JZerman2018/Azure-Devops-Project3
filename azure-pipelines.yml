@@ -198,9 +198,11 @@ stages:
             wget https://archive.apache.org/dist/jmeter/binaries/apache-jmeter-5.2.1.tgz -O jmeter.tgz
             tar xzvf jmeter.tgz
             apache-jmeter-5.2.1/bin/jmeter --version
+            pwd
             sudo mkdir -p log/jmeter
             pwd
             ls -la
+            cat jmeter.log
       - task: Bash@3
         displayName: JMeter Stress Test
         inputs:
@@ -209,6 +211,8 @@ stages:
             apache-jmeter-5.2.1/bin/jmeter -n -t automatedtesting/jmeter/stresstest.jmx \
             -l log/jmeter/StressTest_Results.csv -e -f -o log/jmeter/stresstest-html-report \
             -j log/jmeter/jmeter-stresstest.log
+            pwd
+            ls -la
       - task: Bash@3
         displayName: JMeter Endurance Test
         inputs:
@@ -217,8 +221,10 @@ stages:
             apache-jmeter-5.2.1/bin/jmeter -n -t automatedtesting/jmeter/endurancetest.jmx \
             -l log/jmeter/EnduranceTest_Results.csv -e -f -o log/jmeter/endurancetest-html-report \
             -j log/jmeter/jmeter-endurancetest.log
+            pwd
+            ls -la
       - task: PublishPipelineArtifact@1
         inputs:
-          targetPath: ' $(System.DefaultWorkingDirectory)/automatedtesting/jmeter'
+          targetPath: ' $(Pipeline.Workspace)/s/automatedtesting/jmeter'
           artifact: 'jmeter-reports'
           publishLocation: 'pipeline'
