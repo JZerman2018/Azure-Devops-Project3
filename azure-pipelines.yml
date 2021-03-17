@@ -219,8 +219,3 @@ stages:
             rm -rf *.csv endurancetest-html-report/*
             apache-jmeter-5.2.1/bin/jmeter -n -t automatedtesting/jmeter/endurancetest.jmx \
             -l EnduranceTest_Results.csv -e -f -o endurancetest-html-report/
-      - task: PublishPipelineArtifact@1
-        inputs:
-          targetPath: '$(Pipeline.Workspace)/automatedtests/jmeter'
-          artifact: 'JMeter-Reports'
-          publishLocation: 'pipeline'
