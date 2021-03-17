@@ -197,8 +197,8 @@ stages:
             java -version
             wget https://archive.apache.org/dist/jmeter/binaries/apache-jmeter-5.2.1.tgz -O jmeter.tgz
             tar xzvf jmeter.tgz
-            apache-jmeter-5.4/bin/jmeter --version
-            mkdir -p log/jmeter
+            apache-jmeter-5.2.1/bin/jmeter --version
+            sudo mkdir -p log/jmeter
             pwd
             ls -la
       - task: Bash@3
@@ -219,6 +219,6 @@ stages:
             -j log/jmeter/jmeter-endurancetest.log
       - task: PublishPipelineArtifact@1
         inputs:
-          targetPath: '$(Pipeline.Workspace)/automatedtesting/jmeter'
+          targetPath: ' $(System.DefaultWorkingDirectory)/automatedtesting/jmeter'
           artifact: 'jmeter-reports'
           publishLocation: 'pipeline'
