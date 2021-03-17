@@ -208,8 +208,9 @@ stages:
             sudo mkdir stresstest-report
             apache-jmeter-5.2.1/bin/jmeter -n -t automatedtesting/jmeter/stresstest.jmx \
             -l StressTest_Results.csv -e -f -o stresstest-report \
-            pwd
             ls -la
+            cd stresstest-report
+            ls
       - task: Bash@3
         displayName: JMeter Endurance Test
         inputs:
@@ -218,8 +219,9 @@ stages:
             sudo mkdir endurancetest-report
             apache-jmeter-5.2.1/bin/jmeter -n -t automatedtesting/jmeter/endurancetest.jmx \
             -l EnduranceTest_Results.csv -e -f -o endurancetest-report \
-            pwd
             ls -la
+            cd endurancetest-report
+            ls
       # - task: PublishPipelineArtifact@1
       #   inputs:
       #     targetPath: ' $(Pipeline.Workspace)/s/automatedtesting/jmeter'
