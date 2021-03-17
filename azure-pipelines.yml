@@ -205,18 +205,22 @@ stages:
         inputs:
           targetType: 'inline'
           script: |
-            sudo mkdir stresstest-report
+            sudo mkdir stresstest-html-report
+            rm -rf *.csv stress-test-html-report/*
+            echo "Running JMeter tests Now"
             apache-jmeter-5.2.1/bin/jmeter -n -t automatedtesting/jmeter/stresstest.jmx \
-            -l StressTest_Results.csv -e -f -o stresstest-report \
-            ls -la
-            cat stresstest-report
+            -l StressTest_Results.csv -e -f -o stresstest-html-report/
       - task: Bash@3
         displayName: JMeter Endurance Test
         inputs:
           targetType: 'inline'
           script: |
-            sudo mkdir endurancetest-report
+            sudo mkdir endurancetest-html-report
+            rm -rf *.csv endurancetest-html-report/*
             apache-jmeter-5.2.1/bin/jmeter -n -t automatedtesting/jmeter/endurancetest.jmx \
-            -l EnduranceTest_Results.csv -e -f -o endurancetest-report \
-            ls -la
-            cat endurancetest-report
+            -l EnduranceTest_Results.csv -e -f -o endurancetest-html-report/
+      - task: PublishPipelineArtifact@1
+        inputs:
+          targetPath: '$(Pipeline.Workspace)/automatedtests/jmeter'
+          artifact: 'JMeter-Reports'
+          publishLocation: 'pipeline'
