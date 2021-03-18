@@ -183,12 +183,12 @@ stages:
 
       - task: PublishPipelineArtifact@1
         inputs:
-          targetPath: '$(Pipeline.Workspace)/logs'
+          targetPath: '$(System.DefaultWorkingDirectory)/logs'
           artifact: 'Logs'
           publishLocation: 'pipeline'
       - task: PublishPipelineArtifact@1
         inputs:
-          targetPath: '$(Pipeline.Workspace)/seleniumlog.txt'
+          targetPath: '$(System.DefaultWorkingDirectory)/seleniumlog.txt'
           artifact: 'Seleniumlog'
           publishLocation: 'pipeline'
 
