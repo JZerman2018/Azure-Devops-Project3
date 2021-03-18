@@ -189,15 +189,13 @@ stages:
           targetPath: '$(System.DefaultWorkingDirectory)/seleniumlog.txt'
           artifact: 'Seleniumlog'
           publishLocation: 'pipeline'
-      - task: AzureFileCopy@4
+      - task: CopyFilesOverSSH@0
         inputs:
-          SourcePath: '$(System.DefaultWorkingDirectory)/seleniumlog.txt'
-          azureSubscription: 'SPProject3'
-          Destination: 'AzureVMs'
-          storage: 'project3tstate'
-          resourceGroup: 'AZUREDEVOPSPROJ3'
-          ResourceFilteringMethod: 'tags'
-          vmsAdminUserName: 'jadmin'
+          sshEndpoint: 'SSHVMProj3'
+          sourceFolder: '$(System.DefaultWorkingDirectory)'
+          contents: '/seleniumlog.txt'
+          readyTimeout: '20000'
+      
               # ---------------Install Agent Log Analytics (Only run once-Comment Out)------------------
             #wget https://raw.githubusercontent.com/Microsoft/OMS-Agent-for-Linux/master/installer/scripts/onboard_agent.sh && sh onboard_agent.sh -w f40f07f9-bb5e-42d3-9faf-74075e85ea64 -s FraMdkcW0KHGIa51yqTtisIXqKYLn+JLb5gexdgrLGYDIwZilHIuw7RYYO/7Bj/L9Z2Fax9Mmo8UZ/DJpXv2zQ== -d opinsights.azure.com
             #sudo /opt/microsoft/omsagent/bin/service_control restart f40f07f9-bb5e-42d3-9faf-74075e85ea64
