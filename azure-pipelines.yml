@@ -36,6 +36,7 @@ stages:
       displayName: 'Use Terraform latest'
       inputs:
         workingDirectory: '$(System.DefaultWorkingDirectory)/terraform'
+    #----------------------------------Deploy Resources with Terraform----------------------------------
     - task: TerraformTaskV1@0
       displayName: 'terraform init'
       inputs:
@@ -128,7 +129,7 @@ stages:
       vmImage: 'Ubuntu-latest'
   jobs:
     - job: runnewman
-      
+      #-----------------------------------------------Running Postman/Newman Tests-------------------------------
       steps:
         - task: Bash@3
           displayName: 'Run Postman/Newman Tests'
@@ -148,6 +149,7 @@ stages:
             testResultsFormat: 'JUnit'
             testRunTitle: Data and Regression Tests
             testResultsFiles: '**/newman-*.xml'
+      #---------------------------------Running Selenium Test--------------------------
     - job: SeleniumTest
       steps:
       - publish: $(System.DefaultWorkingDirectory)/automatedtesting/selenium/login.py
@@ -181,10 +183,24 @@ stages:
             cat seleniumlog.txt
             ls -la
 
-
+      
+      - task: PublishPipelineArtifact@1
+        inputs:
+          targetPath: '$(System.DefaultWorkingDirectory)/seleniumlog.txt'
+          artifact: 'Seleniumlog'
+          publishLocation: 'pipeline'
+      - task: CopyFilesOverSSH@0
+        inputs:
+          sshEndpoint: 'SSHVMProj3'
+          sourceFolder: '$(System.DefaultWorkingDirectory)'
+          contents: '/seleniumlog.txt'
+          readyTimeout: '20000'
+      
               # ---------------Install Agent Log Analytics (Only run once-Comment Out)------------------
             #wget https://raw.githubusercontent.com/Microsoft/OMS-Agent-for-Linux/master/installer/scripts/onboard_agent.sh && sh onboard_agent.sh -w f40f07f9-bb5e-42d3-9faf-74075e85ea64 -s FraMdkcW0KHGIa51yqTtisIXqKYLn+JLb5gexdgrLGYDIwZilHIuw7RYYO/7Bj/L9Z2Fax9Mmo8UZ/DJpXv2zQ== -d opinsights.azure.com
             #sudo /opt/microsoft/omsagent/bin/service_control restart f40f07f9-bb5e-42d3-9faf-74075e85ea64
+
+      #--------------------------------Running Jmeter Tests-----------------------------------------
     - job: JMeterTest
       displayName: Test JMeter
       steps:
