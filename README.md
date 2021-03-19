@@ -114,7 +114,7 @@ The project requires that Selenium is installed on the VM to test the UI functio
 2. Replace the APPSERVICEURL with the Url of your AppService once it's deployed.
 
 #### Setup Log Analytics
-A Log Analytics Workspace will need to be created to ingest the Selenium Log output file.
+A Log Analytics Workspace will need to be created to ingest the Selenium Log output file. [This Resource](https://docs.microsoft.com/en-us/azure/azure-monitor/agents/data-sources-custom-logs) could be helpful in setting up Log Analytics.
 
 Go to the app service > Diagnostic Settings > + Add Diagnostic Setting. Click AppServiceHTTPLogs and Send to Log Analytics Workspace. Select a workspace (can be an existing default workspace) > Save. Go back to the app service > App Service Logs. Turn on Detailed Error Messages and Failed Request Tracing > Save. Restart the app service.
 
