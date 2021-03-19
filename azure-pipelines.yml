@@ -170,12 +170,11 @@ stages:
             sudo pip3 install -U selenium
             wget https://chromedriver.storage.googleapis.com/89.0.4389.23/chromedriver_linux64.zip
             unzip chromedriver_linux64.zip
-            sudo chmod a+x /etc/profile.d/env_vars.sh
             rm -rf chromedriver_linux.zip
             chromium-browser -version
             chromedriver --version
             sudo mkdir -p /var/logs/seleniumlogfile.txt
-            sudo chmod 664 /var/logs/seleniumlogfile.txt
+            sudo chmod 775 /var/logs/seleniumlogfile.txt
             sudo python3 -u $(Pipeline.Workspace)/selenium-python-file/login.py 2>&1 | sudo tee -a /var/logs/seleniumlogfile.txt
             cd $(System.DefaultWorkingDirectory)
             mkdir -p logs/selenium
