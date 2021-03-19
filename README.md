@@ -110,9 +110,10 @@ The project requires that Selenium is installed on the VM to test the UI functio
 
 #### JMeter
 
-1. [Install JMeter](https://jmeter.apache.org/download_jmeter.cgi).
-2. Replace the APPSERVICEURL with the Url of your AppService once it's deployed.
+Two tests suites were created using the Starter API files. (Stress Test and Endurance Test) You will need to replace the APPSERVICEURL with the Url of your AppService once it's deployed. In the Pipeline scripts were created to install JMeter and run the Stress and Endurance Tests. For the Pipeline two users were used for the tests so the free-tier resources wouldn't be maxed out. Before submission the tests will need to be ran simulating 30 users for a max duration of 60 seconds. The data output from these tests will need to generate an HTML report.
+**Note:** This may also be done non-CI/CD by [Installing JMeter](https://jmeter.apache.org/download_jmeter.cgi) and running the tests.
 
+**Note:** This may also be done non-CI/CD.
 #### Setup Log Analytics
 A Log Analytics Workspace will need to be created to ingest the Selenium Log output file. [This Resource](https://docs.microsoft.com/en-us/azure/azure-monitor/agents/data-sources-custom-logs) could be helpful in setting up Log Analytics.
 
@@ -121,7 +122,7 @@ Go to the app service > Diagnostic Settings > + Add Diagnostic Setting. Click Ap
 Return to the Log Analytics Workspace > Logs and run a query such as `Perf`to see some log results and check that Log Analytics is working properly.
 
 #### Setup Custom Logging
-In Log Analytics Workspace go to Advanced Settings > Data > Custom Logs > Add + > Choose File. Select the seleniumlog.txt file created from the Pipeline run. (I downloaded a copy to my local machine and uploaded a copy to the Azure VM) > Next > Next. Enter the paths for the Linux machine where the file is located, such as:
+In Log Analytics Workspace go to Advanced Settings > Data > Custom Logs > Add + > Choose File. Select the seleniumlog.txt file created from the Pipeline run. (I downloaded a copy to my local machine and uploaded a copy to the Azure VM via SSH) > Next > Next. Enter the paths for the Linux machine where the file is located, such as:
 *    ` /seleniumlog.txt`
 *   ` <your path>/seleniumlog.txt`
 
@@ -130,6 +131,8 @@ Give it a name and click Done. Make sure the box is checked to apply to my Linux
 Return to the Log Analytics Workspace > Virtual Machines. Click on your VM, then Connect. An agent will be installed on the VM that allows Azure to collect the logs from it. (Under Settings > Agents you should see you have "1 Linux Computer Connected")
 
 Return to the Log Analytics Workspace > logs. Under Queries you can enter the name of the custom log created in the previous query and click Run. It's possible this could take a while to show logs. The logs may only show if the timestamp on the log file is updated after the agent was installed. You may also need to reboot the VM.
+
+**Note:** This may also be done non-CI/CD.
 
 #### Setup Email Alerts
 The project also calls for creating an alert rule with an HTTP 404 condition. It also requires an action group to be created with Email notification. After the alert takes effect, visit the URL of the AppService and try to cause 404 errors by visiting non-existent pages. After the 2nd 404 error an email alert should be triggered. To set this up:
