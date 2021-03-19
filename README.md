@@ -1,4 +1,8 @@
+[![Build Status](https://dev.azure.com/juwanazerman/Project3-Azure-Udacity/_apis/build/status/Juwana-Zerman.Azure-Devops-Project3?branchName=main)](https://dev.azure.com/juwanazerman/Project3-Azure-Udacity/_build/latest?definitionId=9&branchName=main)
+
 # Azure-Devops-Project3: Ensuring Quality Releases
+
+### Visit App Service Website (Until Resources Removed) [Click Here!](https://test-appservice-proj3.azurewebsites.net)
 
 ## Project Overview
 
@@ -13,6 +17,7 @@ In this project, I will demonstrate the skills learned about ensuring quality re
 * Selenium
 * Azure DevOps
 * Azure CLI
+* Azure Log Analytics
 
 ### Project Steps
 
@@ -24,7 +29,7 @@ Configure the storage account and state backend. Replace the values below in ter
     * container_name
     * key
     * access_key
-[Click Here](https://docs.microsoft.com/en-us/azure/developer/terraform/store-state-in-azure-storage) for instructions on creating the Azure storage account and backend. You may also use the ```bashstoragescript.sh``` file in the repo to this.
+[Click Here](https://docs.microsoft.com/en-us/azure/developer/terraform/store-state-in-azure-storage) for instructions on creating the Azure storage account and backend. You may also use the commands in the ```bashstoragescript.sh``` file in the repo to this.
 
 Create a Service Principal for Terraform and replace the below values in the terraform/environments/test/terraform.tfvars files with the output from the Azure CLI.
 
@@ -46,7 +51,7 @@ Login to the Service Principal using the following command with you credentials 
 [Click Here](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/guides/service_principal_client_secret) if you need help with the steps for creating a service principal.
 #### Azure DevOps
 
-1. Create a new Azure Pipeline from the **`azure-pipelines.yaml`** file.
+1. Create a new Azure Pipeline from the **`azure-pipelines.yaml`** file or start building one from scratch if you prefer.
 
 2. Create a new service connection: In Azure Devops go to Project Settings > Service Connections > New Service Connection > Azure Resource Manager > Next > Service Principal (Automatic) > Next > Subscription. After choosing your subscription provide a name for the service connection.
 
@@ -58,7 +63,11 @@ Login to the Service Principal using the following command with you credentials 
 
 6. Create your Azure resources (Most can be provisioned via Terraform using the Pipeline by adding tasks and jobs to the `azure-pipelines.yml` file utilizing ```terraform init```, ```terraform plan```, and ```terraform apply``` commands).
 
+![Terraform Apply](screenshots/TerraformApplyFirst.png)
+
 7. Once the resources are deployed you will have to follow the instructions on setting up an environment in Azure Pipelines to register the Linux VM so your app can be deployed to it. You can find that documentation [here](https://docs.microsoft.com/en-us/azure/devops/pipelines/process/environments-virtual-machines?view=azure-devops). In Azure DevOps under Pipelines > Environments > TEST > Add resource > Select "Virtual Machines" > Next > Under Operating System select "Linux".  You will be given a registration script to copy. SSH into your VM and paste this script into the terminal and run it. This will register your VM and allow Azure Pipelines to act as an agent to run commands on it.
+
+![TEST-VM Environment](screenshots/EnvironmentVM.png)
 
 8. Build the FakeRestAPI and Automated Testing artifacts and publish them to the artifact staging directory in the Pipeline.
 
@@ -66,7 +75,11 @@ Login to the Service Principal using the following command with you credentials 
 
 ![Fake Rest Deploy](screenshots/ScreenshotFakeRestDeploy.png)
 
+## Running Tests in Pipeline
 
+#### Postman
+
+[Install Postman](https://www.postman.com/downloads/).
 
 
 #### Selenium
@@ -79,8 +92,3 @@ Login to the Service Principal using the following command with you credentials 
 
 1. [Install JMeter](https://jmeter.apache.org/download_jmeter.cgi).
 2. Replace the APPSERVICEURL with the Url of your AppService once it's deployed.
-
-#### Postman
-
-[Install Postman](https://www.postman.com/downloads/).
-
