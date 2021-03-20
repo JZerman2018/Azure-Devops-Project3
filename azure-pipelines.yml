@@ -234,3 +234,13 @@ stages:
             rm -rf *.csv endurancetest-html-report/*
             apache-jmeter-5.2.1/bin/jmeter -n -t automatedtesting/jmeter/endurancetest.jmx \
             -l EnduranceTest_Results.csv -e -f -o endurancetest-html-report/
+      #--------------------------------------Destroy Resources---------------------------
+
+      - task: TerraformCLI@0
+        inputs:
+          command: 'destroy'
+          workingDirectory: '$(System.DefaultWorkingDirectory)/terraform'
+          environmentServiceName: 'SPProject3-Terraform'
+          secureVarsFile: 'terraform.tfvars'
+          commandOptions: 'auto-approve'
+          allowTelemetryCollection: true
