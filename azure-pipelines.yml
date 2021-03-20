@@ -16,13 +16,7 @@ name: Azure Pipelines
 variables:
   python.version: '3.9.1'
 stages:
-- stage: Provision
-  jobs:
-  - job: provision_azure_infrastructure
-    displayName: Provision Azure Infrastructure
-    pool:
-      vmImage: 'ubuntu-latest'
-    steps:
+
     - task: DownloadSecureFile@1
       inputs:
         secureFile: '.env'
@@ -235,12 +229,17 @@ stages:
             apache-jmeter-5.2.1/bin/jmeter -n -t automatedtesting/jmeter/endurancetest.jmx \
             -l EnduranceTest_Results.csv -e -f -o endurancetest-html-report/
       #--------------------------------------Destroy Resources---------------------------
-
-      - task: TerraformCLI@0
-        inputs:
-          command: 'destroy'
+- stage: Final
+  jobs:
+  - job: Destroy Resources
+    displayName: Terraform Destroy
+    pool:
+      vmImage: 'ubuntu-latest'
+    steps:
+    - task: TerraformCLI@0
+      inputs:
+        command: 'destroy'
           workingDirectory: '$(System.DefaultWorkingDirectory)/terraform'
           environmentServiceName: 'SPProject3-Terraform'
           secureVarsFile: 'terraform.tfvars'
           commandOptions: 'auto-approve'
-          allowTelemetryCollection: true
