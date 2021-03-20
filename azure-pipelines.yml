@@ -16,7 +16,13 @@ name: Azure Pipelines
 variables:
   python.version: '3.9.1'
 stages:
-
+- stage: Provision
+  jobs:
+  - job: provision_azure_infrastructure
+    displayName: Provision Azure Infrastructure
+    pool:
+      vmImage: 'ubuntu-latest'
+    steps:
     - task: DownloadSecureFile@1
       inputs:
         secureFile: '.env'
@@ -86,8 +92,8 @@ stages:
     - publish: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId)-automatedtests.zip'
       displayName: 'Upload Test Package'
       artifact: drop-automatedtests
-  - stage:
-    jobs:
+- stage:
+  jobs:
   - deployment: TEST
     displayName: Deploy VM
     environment:
@@ -228,6 +234,7 @@ stages:
             rm -rf *.csv endurancetest-html-report/*
             apache-jmeter-5.2.1/bin/jmeter -n -t automatedtesting/jmeter/endurancetest.jmx \
             -l EnduranceTest_Results.csv -e -f -o endurancetest-html-report/
+
       #--------------------------------------Destroy Resources---------------------------
 # - stage: Final
 #   jobs:
