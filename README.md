@@ -110,7 +110,7 @@ Go to the app service > Diagnostic Settings > + Add Diagnostic Setting. Click Ap
 Return to the Log Analytics Workspace > Logs and run a query such as `Perf`to see some log results and check that Log Analytics is working properly.
 
 #### Setup Custom Logging
-In Log Analytics Workspace go to Advanced Settings > Data > Custom Logs > Add + > Choose File. Select the seleniumlog.txt file created from the Pipeline run. (I downloaded a copy to my local machine and uploaded a copy to the Azure VM via SSH in the Pipeline just in case) > Next > Next. Enter the paths for the Linux machine where the file is located, such as:
+In your Log Analytics Workspace go to Advanced Settings > Data > Custom Logs > Add + > Choose File. Select the seleniumlog.txt file created from the Pipeline run. (I downloaded a copy to my local machine and uploaded a copy to the Azure VM via SSH in the Pipeline just in case) > Next > Next. Enter the paths for the Linux machine where the file is located, such as:
 *    ` /seleniumlog.txt`
 *   ` <your path>/seleniumlog.txt`
 
@@ -121,6 +121,8 @@ Return to the Log Analytics Workspace > Virtual Machines. Click on your VM, then
 Return to the Log Analytics Workspace > logs. Under Queries you can enter the name of the custom log created in the previous query and click Run. It's possible this could take a while to show logs. The logs may only show if the timestamp on the log file is updated after the agent was installed. You may also need to reboot the VM.
 
 **Note:** This step may also be done non-CI/CD.
+
+![Log Analytics Screenshot](screenshots/LogAnalyticsforSeleniumlog.jpg)
 
 #### Setup Email Alerts
 The project also calls for creating an alert rule with an HTTP 404 condition. It also requires an action group to be created with Email notification. After the alert takes effect, visit the URL of the AppService and try to cause 404 errors by visiting non-existent pages. After the 2nd 404 error an email alert should be triggered. To set this up:
