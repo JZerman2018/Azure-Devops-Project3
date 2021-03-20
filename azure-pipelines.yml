@@ -86,8 +86,8 @@ stages:
     - publish: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId)-automatedtests.zip'
       displayName: 'Upload Test Package'
       artifact: drop-automatedtests
-- stage:
-  jobs:
+  - stage:
+    jobs:
   - deployment: TEST
     displayName: Deploy VM
     environment:
