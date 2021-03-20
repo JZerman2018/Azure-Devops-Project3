@@ -2,8 +2,6 @@
 
 # Azure-Devops-Project3: Ensuring Quality Releases
 
-### Visit App Service Website (Until Resources Removed) [Click Here!](https://test-appservice-proj3.azurewebsites.net)
-
 ## Project Overview
 
 In this project, I will demonstrate the skills learned about ensuring quality releases in the Udacity Nanodegree: DevOps Engineer for Microsoft Azure. Using Microsoft Azure, I will create a VM using Terraform and deploy an app to Azure AppService. I will then test environments and run automated tests. I will also utilize monitoring tools to provide insight into my application's behavior by querying custom log files.
