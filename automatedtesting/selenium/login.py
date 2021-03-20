@@ -5,7 +5,7 @@ from datetime import datetime
 import logging
 
 logging.basicConfig(filename="./seleniumlog.txt", format="%(asctime)s %(message)s",
-                    filemode="w", level=logging.INFO, datefmt="%Y-%m-%d %H:%M")
+                    filemode="w", level=logging.INFO, datefmt="%Y-%m-%d %H:%M:%S")
 # Start the browser and login with standard_user
 def login (user, password):
     print('Starting the browser...')
