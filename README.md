@@ -120,7 +120,7 @@ Return to the Log Analytics Workspace > logs. Under Queries you can enter the na
 
 **Note:** This step may also be done non-CI/CD.
 
-![Log Analytics Screenshot](screenshots/LogAnalyticsforSeleniumlog.jpg)
+![Log Analytics Screenshot](screenshots/LogAnalyticsWithMyLinuxVMFinally.png)
 
 #### Setup Email Alerts
 The project also calls for creating an alert rule with an HTTP 404 condition. It also requires an action group to be created with Email notification. After the alert takes effect, visit the URL of the AppService and try to cause 404 errors by visiting non-existent pages. After the 2nd 404 error an email alert should be triggered. To set this up:
